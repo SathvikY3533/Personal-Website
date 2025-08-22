@@ -2,27 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sathvik Yechuri</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sathvik Portfolio</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
-<body>
-  <header>
-    <h1>Sathvik Yechuri</h1>
-    <p>Robotics • Automation • 3D Modeling</p>
-  </header>
+<body class="light">
 
-  <section id="project-board"></section>
+  <!-- Dark Mode Toggle -->
+  <button id="mode-btn" aria-label="Toggle color mode">🌓</button>
 
-  <div id="popup" class="hidden">
-    <div class="popup-content">
-      <span id="close">&times;</span>
-      <h2 id="popup-title"></h2>
-      <p id="popup-description"></p>
-      <a id="popup-link" target="_blank">View Project</a>
+  <!-- Hero Section -->
+  <section id="hero" aria-label="Intro">
+    <div class="hero-left">
+      <img src="assets/images/profile.jpeg" alt="Profile" class="profile-pic">
+      <div class="hero-text">
+        <h1 class="hero-name">Srikiran Sathvik Yechuri</h1>
+        <p class="hero-desc">ECE Honors — UT Austin — Class of 2029</p>
+      </div>
     </div>
-  </div>
+    <div class="hero-right">
+      👋 Welcome! This is my personal website where I showcase my projects, experiments, and research in robotics and computer engineering.
+    </div>
+  </section>
+
+  <main id="content">
+    <!-- Top Projects -->
+    <section id="top-projects" aria-labelledby="tp-title">
+      <h2 id="tp-title">Top Projects</h2>
+      <div id="top-projects-container" class="top-grid"></div>
+    </section>
+
+    <!-- All Projects: Brick River -->
+    <section id="projects" aria-labelledby="all-title">
+      <h2 id="all-title">All Projects</h2>
+      <div id="flowing-projects-container"></div>
+    </section>
+
+    <!-- Test 3D Simulation -->
+    <section id="test-3d" aria-labelledby="sim-title">
+      <h2 id="sim-title">Test 3D Simulation</h2>
+      <div class="test-3d-window" id="3d-viewer">Loading 3D model...</div>
+    </section>
+  </main>
 
   <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
 </body>
 </html>
