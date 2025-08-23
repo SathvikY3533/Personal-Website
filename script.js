@@ -8,14 +8,14 @@ document.getElementById('mode-btn').addEventListener('click', () => {
 /* -------------------------
    Determine Base Path
 ------------------------- */
-const basePath = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "./"  // local testing
-  : "./"; // GitHub Pages root; change to "/repo-name/" if not root
+const repoName = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? "" // local testing
+  : "/Personal-Website"; // GitHub Pages repo name
 
 /* -------------------------
    Projects
 ------------------------- */
-fetch(`${basePath}projects/projects.json`)
+fetch(`${repoName}/projects/projects.json`)
   .then(r => r.json())
   .then(projects => {
     buildTopProjects(projects);
@@ -54,7 +54,7 @@ function buildTopProjects(projects) {
       if(allowedTools.includes(toolName)) {
         const img = document.createElement('img');
         img.className = 'tool-icon';
-        img.src = `${basePath}assets/images/tools/${toolName}.svg`;
+        img.src = `${repoName}/assets/images/tools/${toolName}.svg`;
         img.alt = toolName;
         toolsContainer.appendChild(img);
       }
@@ -149,7 +149,7 @@ function buildBrickRiver(projects) {
     const track = document.createElement('div');
     track.className = 'flow-track';
     track.dataset.paused = 'false';
-    track.dataset.speed = 0.08 + i*0.02; // slower scrolling
+    track.dataset.speed = 0.04 + i*0.01; // slower scroll
     track.dataset.direction = i % 2 === 0 ? 'ltr' : 'rtl';
 
     rowItems.forEach(p => track.appendChild(createProjectCard(p)));
@@ -184,7 +184,7 @@ function createProjectCard(p) {
     if(allowedTools.includes(toolName)) {
       const img = document.createElement('img');
       img.className = 'tool-icon';
-      img.src = `${basePath}assets/images/tools/${toolName}.svg`;
+      img.src = `${repoName}/assets/images/tools/${toolName}.svg`;
       img.alt = toolName;
       toolsContainer.appendChild(img);
     }
