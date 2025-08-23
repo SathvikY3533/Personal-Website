@@ -1,12 +1,52 @@
 [
-  { "title": "Bio-Inspired Robotic Hand", "desc":"", "img":"" },
-  { "title": "Spider-Inspired Walking Robot", "desc":"", "img":"" },
-  { "title": "CAD4Kidz Puzzle Design", "desc":"", "img":"" },
-  { "title": "LoCoNet Model", "desc":"", "img":"" },
-  { "title": "Active Speaker Detection", "desc":"", "img":"" },
-  { "title": "Space Exploration Robotics", "desc":"", "img":"" },
-  { "title": "Energy Efficient Locomotion", "desc":"", "img":"" },
-  { "title": "Octopus-Inspired Gripper", "desc":"", "img":"" },
-  { "title": "Mole-Inspired Burrowing Robot", "desc":"", "img":"" },
-  { "title": "ISM: 3D Simulation & Research", "desc":"", "img":"" }
+  {
+    "title": "Python App",
+    "description": "I created a Python app over the summer that could detect emotions from the human face.",
+    "tools": ["Python", "NumPy", "OpenCV", "TensorFlow", "Flask"]
+  },
+  {
+    "title": "3D Robot Simulation",
+    "description": "Built a robot simulation using Three.js and WebGL to visualize robot movements in 3D.",
+    "tools": ["ThreeJS", "JavaScript", "HTML", "CSS"]
+  },
+  {
+    "title": "Arduino Rover",
+    "description": "Designed a remote-controlled rover using Arduino and motor drivers.",
+    "tools": ["Arduino", "C++", "Electronics"]
+  },
+  {
+    "title": "Web Portfolio",
+    "description": "Developed my personal portfolio website with interactive project tiles and dark mode.",
+    "tools": ["HTML", "CSS", "JavaScript"]
+  },
+  {
+    "title": "Machine Learning Model",
+    "description": "Trained a neural network to classify handwritten digits.",
+    "tools": ["Python", "NumPy", "TensorFlow", "Keras"]
+  },
+  {
+    "title": "CAD 3D Puzzle",
+    "description": "Designed an intricate 3D puzzle using Fusion360.",
+    "tools": ["Fusion360", "CAD"]
+  },
+  {
+    "title": "Physics Experiment Visualizer",
+    "description": "Interactive web app that visualizes physics experiments and concepts.",
+    "tools": ["JavaScript", "HTML", "CSS", "ThreeJS"]
+  },
+  {
+    "title": "Boxing Tracker",
+    "description": "Built an app to track and analyze boxing workouts.",
+    "tools": ["Python", "Flask", "Matplotlib"]
+  },
+  {
+    "title": "Robotic Hand Prototype",
+    "description": "Created a bio-inspired robotic hand for manipulating objects.",
+    "tools": ["Arduino", "C++", "Electronics", "3DPrinting"]
+  },
+  {
+    "title": "Chess AI",
+    "description": "Developed a chess AI that plays with minimax and alpha-beta pruning.",
+    "tools": ["Python", "NumPy"]
+  }
 ]

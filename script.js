@@ -1,145 +1,223 @@
-// -------------------------
-// Dark Mode
-// -------------------------
-document.getElementById('mode-btn').addEventListener('click', ()=>{ 
+/* -------------------------
+   Dark Mode Toggle
+------------------------- */
+document.getElementById('mode-btn').addEventListener('click', () => { 
   document.body.classList.toggle('dark'); 
 });
 
-// -------------------------
-// Projects
-// -------------------------
-fetch('./projects/projects.json')
-  .then(r => {
-    if (!r.ok) throw new Error(`HTTP error! Status: ${r.status}`);
-    return r.json();
-  })
+/* -------------------------
+   Projects
+------------------------- */
+fetch('projects/projects.json')
+  .then(r => r.json())
   .then(projects => {
-    console.log('Loaded projects:', projects);
     buildTopProjects(projects);
     buildBrickRiver(projects);
   })
-  .catch(err => {
-    console.error('projects.json load error:', err);
-    document.getElementById('top-projects-container').innerHTML = 'Failed to load projects.';
-    document.getElementById('flowing-projects-container').innerHTML = 'Failed to load projects.';
-  });
+  .catch(err => console.error('projects.json load error:', err));
 
-function buildTopProjects(projects){
+/* -------------------------
+   Top Projects
+------------------------- */
+function buildTopProjects(projects) {
   const top = document.getElementById('top-projects-container');
   top.innerHTML = '';
   const chosen = projects.slice(0, 2);
+
   chosen.forEach(p => {
     const card = document.createElement('div');
     card.className = 'top-card';
-    card.textContent = p.title;
+
+    // Title
+    const title = document.createElement('div');
+    title.className = 'tile-title';
+    title.textContent = p.title;
+
+    // Description (non-bold)
+    const desc = document.createElement('div');
+    desc.className = 'tile-desc';
+    desc.style.fontWeight = 'normal';
+    desc.textContent = p.description;
+
+    // Tools container
+    const toolsContainer = document.createElement('div');
+    toolsContainer.className = 'tile-tools';
+    const allowedTools = ["Python","NumPy","Pandas","OpenCV","Matplotlib","PyTorch","TensorFlow","Keras"];
+    p.tools.forEach(toolName => {
+      if(allowedTools.includes(toolName)) {
+        const img = document.createElement('img');
+        img.className = 'tool-icon';
+        img.src = `assets/images/tools/${toolName}.svg`;
+        img.alt = toolName;
+        toolsContainer.appendChild(img);
+      }
+    });
+
+    card.append(title, desc, toolsContainer);
     top.appendChild(card);
+
+    // Clickable popup
+    card.addEventListener('click', () => openProjectPopup(p));
   });
 }
 
-function buildBrickRiver(projects){
+/* -------------------------
+   Popup Function
+------------------------- */
+function openProjectPopup(proj, rowTrack = null) {
+  if (rowTrack) rowTrack.dataset.paused = 'true';
+
+  const overlay = document.createElement('div');
+  overlay.id = 'popup-overlay';
+  overlay.style.cssText = `
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center;
+    z-index:1000;
+  `;
+
+  const popup = document.createElement('div');
+  popup.style.cssText = `
+    background: #fff; padding: 20px; border-radius: 12px; max-width: 80%; max-height: 80%; overflow-y: auto;
+  `;
+
+  const title = document.createElement('h2');
+  title.textContent = proj.title;
+  popup.appendChild(title);
+
+  const desc = document.createElement('p');
+  desc.textContent = proj.description;
+  desc.style.fontWeight = 'normal';
+  popup.appendChild(desc);
+
+  if (proj.image) {
+    const img = document.createElement('img');
+    img.src = proj.image;
+    img.style.width = '100%';
+    popup.appendChild(img);
+  } else if (proj.video) {
+    const vid = document.createElement('video');
+    vid.src = proj.video;
+    vid.controls = true;
+    vid.style.width = '100%';
+    popup.appendChild(vid);
+  }
+
+  if (proj.link) {
+    const btn = document.createElement('a');
+    btn.href = proj.link;
+    btn.target = "_blank";
+    btn.textContent = "Learn More";
+    btn.style.cssText = `
+      display:inline-block; margin-top:10px; padding:8px 12px; background:#007bff; color:#fff;
+      border-radius:6px; text-decoration:none;
+    `;
+    popup.appendChild(btn);
+  }
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.remove();
+      if (rowTrack) rowTrack.dataset.paused = 'false';
+    }
+  });
+
+  overlay.appendChild(popup);
+  document.body.appendChild(overlay);
+}
+
+/* -------------------------
+   Brick River All Projects
+------------------------- */
+function buildBrickRiver(projects) {
   const container = document.getElementById('flowing-projects-container');
   container.innerHTML = '';
+
   const perRow = 5;
   const rows = chunk(projects, perRow);
 
   rows.forEach((rowItems, i) => {
     const row = document.createElement('div');
-    row.className = 'flow-row ' + (i%2===0?'left-to-right':'right-to-left');
+    row.className = 'flow-row';
+
     const track = document.createElement('div');
     track.className = 'flow-track';
-    track.style.setProperty('--dur', `${42+i*6}s`);
-    rowItems.forEach(p => track.appendChild(createTile(p)));
-    rowItems.forEach(p => track.appendChild(createTile(p)));
+    track.dataset.paused = 'false';
+    track.dataset.speed = 0.08 + i*0.02; // slowed down scrolling
+    track.dataset.direction = i % 2 === 0 ? 'ltr' : 'rtl';
+    rowItems.forEach(p => track.appendChild(createProjectCard(p)));
+    rowItems.forEach(p => track.appendChild(createProjectCard(p)));
     row.appendChild(track);
     container.appendChild(row);
   });
+
+  animateRows();
 }
 
-function chunk(arr, size){
+function chunk(arr, size) {
   const out = [];
-  for(let i=0;i<arr.length;i+=size) out.push(arr.slice(i,i+size));
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
   return out;
 }
 
-function createTile(p){
+function createProjectCard(p) {
   const el = document.createElement('div');
-  el.className='tile';
-  el.innerHTML=`<div class="t">${p.title}</div>`;
+  el.className = 'tile';
+
+  el.innerHTML = `
+    <div class="tile-title">${p.title}</div>
+    <div class="tile-desc" style="font-weight:normal;">${p.description}</div>
+    <div class="tile-tools"></div>
+  `;
+
+  const toolsContainer = el.querySelector('.tile-tools');
+  const allowedTools = ["Python","NumPy","Pandas","OpenCV","Matplotlib","PyTorch","TensorFlow","Keras"];
+  p.tools.forEach(toolName => {
+    if(allowedTools.includes(toolName)) {
+      const img = document.createElement('img');
+      img.className = 'tool-icon';
+      img.src = `assets/images/tools/${toolName}.svg`;
+      img.alt = toolName;
+      toolsContainer.appendChild(img);
+    }
+  });
+
+  el.addEventListener('click', () => {
+    const parentTrack = el.closest('.flow-track');
+    openProjectPopup(p, parentTrack);
+  });
+
   return el;
 }
 
-// -------------------------
-// 3D STL Viewer (Three.js ES Modules)
-// -------------------------
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
-import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
-import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
+/* -------------------------
+   JS Row Animation
+------------------------- */
+function animateRows() {
+  const tracks = document.querySelectorAll('.flow-track');
+  let lastTime = performance.now();
 
-function init3DViewer() {
-  const container = document.getElementById('3d-viewer');
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  function step(time) {
+    const delta = time - lastTime;
+    lastTime = time;
 
-  container.innerHTML = 'Loading 3D model...';
+    tracks.forEach(track => {
+      if (track.dataset.paused === 'true') return;
 
-  // Renderer
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(width, height);
-  container.innerHTML = '';
-  container.appendChild(renderer.domElement);
+      const speed = parseFloat(track.dataset.speed);
+      let x = parseFloat(track.dataset.x || 0);
 
-  // Scene & Camera
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf4f4f4);
-  const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
-  camera.position.set(0, 0, 150);
+      x += (track.dataset.direction === 'ltr' ? 1 : -1) * speed * delta;
 
-  // Lights
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  dirLight.position.set(1,1,1);
-  scene.add(dirLight);
-  const ambLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambLight);
+      const trackWidth = track.scrollWidth / 2;
+      if (x > 0) x -= trackWidth;
+      if (x < -trackWidth) x += trackWidth;
 
-  // Controls
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.05;
+      track.style.transform = `translateX(${x}px)`;
+      track.dataset.x = x;
+    });
 
-  // STL Loader
-  const loader = new STLLoader();
-  loader.load(
-    './assets/models/test_ism_robot.stl',
-    geometry => {
-      const material = new THREE.MeshPhongMaterial({ color: 0x0077ff, shininess: 80 });
-      const mesh = new THREE.Mesh(geometry, material);
+    requestAnimationFrame(step);
+  }
 
-      geometry.computeBoundingBox();
-      const center = new THREE.Vector3();
-      geometry.boundingBox.getCenter(center);
-      mesh.position.sub(center);
-
-      scene.add(mesh);
-
-      container.innerHTML = ''; // remove loading text
-
-      function animate() {
-        requestAnimationFrame(animate);
-        mesh.rotation.y += 0.004;
-        controls.update();
-        renderer.render(scene, camera);
-      }
-      animate();
-    },
-    xhr => {
-      container.innerHTML = `Loading 3D model... ${Math.floor((xhr.loaded/xhr.total)*100)}%`;
-    },
-    err => {
-      console.error('STL load error:', err);
-      container.innerHTML = 'Failed to load 3D model.';
-    }
-  );
+  requestAnimationFrame(step);
 }
-
-window.addEventListener('load', init3DViewer);
-window.addEventListener('resize', init3DViewer);
