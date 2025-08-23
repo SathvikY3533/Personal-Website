@@ -1,12 +1,28 @@
-document.getElementById('mode-btn').addEventListener('click', ()=>{ document.body.classList.toggle('dark'); });
+// -------------------------
+// Dark Mode
+// -------------------------
+document.getElementById('mode-btn').addEventListener('click', ()=>{ 
+  document.body.classList.toggle('dark'); 
+});
 
-fetch('projects/projects.json')
-  .then(r => r.json())
+// -------------------------
+// Projects
+// -------------------------
+fetch('./projects/projects.json')
+  .then(r => {
+    if (!r.ok) throw new Error(`HTTP error! Status: ${r.status}`);
+    return r.json();
+  })
   .then(projects => {
+    console.log('Loaded projects:', projects);
     buildTopProjects(projects);
     buildBrickRiver(projects);
   })
-  .catch(err => console.error('projects.json load error:', err));
+  .catch(err => {
+    console.error('projects.json load error:', err);
+    document.getElementById('top-projects-container').innerHTML = 'Failed to load projects.';
+    document.getElementById('flowing-projects-container').innerHTML = 'Failed to load projects.';
+  });
 
 function buildTopProjects(projects){
   const top = document.getElementById('top-projects-container');
@@ -23,7 +39,6 @@ function buildTopProjects(projects){
 function buildBrickRiver(projects){
   const container = document.getElementById('flowing-projects-container');
   container.innerHTML = '';
-
   const perRow = 5;
   const rows = chunk(projects, perRow);
 
@@ -53,43 +68,77 @@ function createTile(p){
   return el;
 }
 
-/* 3D STL Viewer */
-function init3DViewer(){
+// -------------------------
+// 3D STL Viewer (Three.js ES Modules)
+// -------------------------
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import { STLLoader } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/loaders/STLLoader.js';
+
+function init3DViewer() {
   const container = document.getElementById('3d-viewer');
   const width = container.clientWidth;
   const height = container.clientHeight;
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf4f4f4);
+  container.innerHTML = 'Loading 3D model...';
 
-  const camera = new THREE.PerspectiveCamera(45,width/height,0.1,1000);
-  camera.position.set(0,0,150);
-
-  const renderer = new THREE.WebGLRenderer({antialias:true});
-  renderer.setSize(width,height);
-  container.innerHTML='';
+  // Renderer
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  container.innerHTML = '';
   container.appendChild(renderer.domElement);
 
-  const light1 = new THREE.DirectionalLight(0xffffff,0.8);
-  light1.position.set(1,1,1);
-  scene.add(light1);
-  const light2 = new THREE.AmbientLight(0xffffff,0.5);
-  scene.add(light2);
+  // Scene & Camera
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf4f4f4);
+  const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
+  camera.position.set(0, 0, 150);
 
-  const loader = new THREE.STLLoader();
-  loader.load('assets/models/test_ism_robot.stl', function(geometry){
-    const material = new THREE.MeshPhongMaterial({color:0x0077ff, shininess:80});
-    const mesh = new THREE.Mesh(geometry,material);
-    geometry.center();
-    scene.add(mesh);
+  // Lights
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(1,1,1);
+  scene.add(dirLight);
+  const ambLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambLight);
 
-    function animate(){
-      requestAnimationFrame(animate);
-      mesh.rotation.y+=0.004;
-      renderer.render(scene,camera);
+  // Controls
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+
+  // STL Loader
+  const loader = new STLLoader();
+  loader.load(
+    './assets/models/test_ism_robot.stl',
+    geometry => {
+      const material = new THREE.MeshPhongMaterial({ color: 0x0077ff, shininess: 80 });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      geometry.computeBoundingBox();
+      const center = new THREE.Vector3();
+      geometry.boundingBox.getCenter(center);
+      mesh.position.sub(center);
+
+      scene.add(mesh);
+
+      container.innerHTML = ''; // remove loading text
+
+      function animate() {
+        requestAnimationFrame(animate);
+        mesh.rotation.y += 0.004;
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    },
+    xhr => {
+      container.innerHTML = `Loading 3D model... ${Math.floor((xhr.loaded/xhr.total)*100)}%`;
+    },
+    err => {
+      console.error('STL load error:', err);
+      container.innerHTML = 'Failed to load 3D model.';
     }
-    animate();
-  });
+  );
 }
 
 window.addEventListener('load', init3DViewer);

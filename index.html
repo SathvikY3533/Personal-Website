@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sathvik Portfolio</title>
+  <title>Sathvik Y's Portfolio</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
 </head>
@@ -15,14 +15,14 @@
   <!-- Hero Section -->
   <section id="hero" aria-label="Intro">
     <div class="hero-left">
-      <img src="assets/images/profile.jpeg" alt="Profile" class="profile-pic">
+      <img src="assets/images/me7.jpg" alt="Profile" class="profile-pic">
       <div class="hero-text">
         <h1 class="hero-name">Srikiran Sathvik Yechuri</h1>
-        <p class="hero-desc">ECE Honors — UT Austin — Class of 2029</p>
+        <p class="hero-desc">ECE Honors @ UT Austin — Class of 2029</p>
       </div>
     </div>
     <div class="hero-right">
-      👋 Welcome! This is my personal website where I showcase my projects, experiments, and research in robotics and computer engineering.
+      👋 Howdy! This is where I document my passion projects and research in robotics and computer engineering. Feel free to contact me if you have any questions, or would like to just chat!
     </div>
   </section>
 
@@ -30,13 +30,13 @@
     <!-- Top Projects -->
     <section id="top-projects" aria-labelledby="tp-title">
       <h2 id="tp-title">Top Projects</h2>
-      <div id="top-projects-container" class="top-grid"></div>
+      <div id="top-projects-container" class="top-grid">Loading projects...</div>
     </section>
 
     <!-- All Projects: Brick River -->
     <section id="projects" aria-labelledby="all-title">
       <h2 id="all-title">All Projects</h2>
-      <div id="flowing-projects-container"></div>
+      <div id="flowing-projects-container">Loading projects...</div>
     </section>
 
     <!-- Test 3D Simulation -->
@@ -46,8 +46,7 @@
     </section>
   </main>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
-  <script src="script.js"></script>
+  <!-- ES Modules for Three.js -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
