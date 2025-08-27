@@ -5,6 +5,9 @@ document.getElementById('mode-btn').addEventListener('click', () => {
   document.body.classList.toggle('dark'); 
 });
 
+import { showSTL } from './stlShow.js';
+
+
 /* -------------------------
    Determine Base Path
 ------------------------- */
@@ -96,25 +99,26 @@ function buildTopProjects(projects) {
       vidWrapper.style.overflow = 'hidden';
       vidWrapper.style.display = 'flex';
       vidWrapper.style.justifyContent = 'center';
-      mediaContainer.appendChild(vidWrapper);
+      cardContent.appendChild(vidWrapper);
     }
 
     if (p.stl) {
       const stlWrapper = document.createElement('div');
       stlWrapper.className = 'stl-container';
-      stlWrapper.innerHTML = `
-        <model-viewer 
-          src='${p.stl}' 
-          alt='${p.title} 3D Model' 
-          camera-controls 
-          auto-rotate 
-          ar 
-          ar-modes='webxr scene-viewer quick-look' 
-          style='width:100%; height:300px; border-radius:12px;'>
-        </model-viewer>
-      `;
+      stlWrapper.id = `stl-${index}`; // unique ID per tile
+      stlWrapper.style.width = '100%';
+      stlWrapper.style.height = '300px';
+      stlWrapper.style.borderRadius = '12px';
       mediaContainer.appendChild(stlWrapper);
+
+      // Load STL after the container exists
+      import('./stlShow.js').then(module => {
+        module.showSTL(stlWrapper.id, p.stl);
+      });
     }
+
+
+
 
     cardContent.appendChild(mediaContainer);
     card.appendChild(cardContent);
@@ -166,6 +170,8 @@ function buildTopProjects(projects) {
     top.appendChild(card);
   });
 }
+
+
 
 /* -------------------------
    Brick River All Projects
@@ -281,3 +287,4 @@ function animateRows() {
 
   requestAnimationFrame(step);
 }
+

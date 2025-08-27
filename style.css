@@ -14,6 +14,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 body {
+  display: flex;
+  flex-direction: column;
   font-family: 'Montserrat', sans-serif;
   background: var(--bg-light);
   color: var(--text-light);
@@ -23,6 +25,8 @@ body {
   transition: background .35s, color .35s;
 }
 body.dark { background: var(--bg-dark); color: var(--text-dark); }
+
+main { flex: 1; }
 
 #mode-btn{
   position: fixed;
@@ -362,6 +366,7 @@ body.dark #popup-overlay > div { background: #333; color: var(--text-dark); }
   border: none;
 }
 
+
 /* External link button */
 #popup-overlay a {
   display:inline-block;
@@ -410,4 +415,5 @@ body.dark #popup-overlay > div { background: #333; color: var(--text-dark); }
   font-size: 0.9rem;
   color: var(--text-light);
   opacity: 0.7;
+  flex-shrink: 0;
 }
