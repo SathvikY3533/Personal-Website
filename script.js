@@ -235,7 +235,7 @@ function createProjectCard(p) {
 
   (p.tools || []).forEach(toolFile => {
     const img = document.createElement('img');
-    img.src = '/assets/images/tools/${toolFile}';
+    img.src = `/assets/images/tools/${toolFile}`;
     img.alt = toolFile.replace('.svg','');
     img.style.width = '24px';
     img.style.height = '24px';
