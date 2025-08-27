@@ -11,14 +11,12 @@ import { showSTL } from './stlShow.js';
 /* -------------------------
    Determine Base Path
 ------------------------- */
-const repoName = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? "" // local testing
-  : "/Personal-Website"; // GitHub Pages repo name
+const repoName = ""
 
 /* -------------------------
    Projects
 ------------------------- */
-fetch(`${repoName}/projects/projects.json`)
+fetch(`/projects/projects.json`)
   .then(r => r.json())
   .then(projects => {
     buildTopProjects(projects);
@@ -157,7 +155,7 @@ function buildTopProjects(projects) {
     toolsContainer.style.gap = '0.3rem';
     (p.tools || []).forEach(toolFile => {
       const img = document.createElement('img');
-      img.src = `${repoName}/assets/images/tools/${toolFile}`;
+      img.src = `/assets/images/tools/${toolFile}`;
       img.alt = toolFile.replace('.svg','');
       img.style.width = '24px';
       img.style.height = '24px';
@@ -237,7 +235,7 @@ function createProjectCard(p) {
 
   (p.tools || []).forEach(toolFile => {
     const img = document.createElement('img');
-    img.src = `${repoName}/assets/images/tools/${toolFile}`;
+    img.src = '/assets/images/tools/${toolFile}';
     img.alt = toolFile.replace('.svg','');
     img.style.width = '24px';
     img.style.height = '24px';
