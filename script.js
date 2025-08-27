@@ -19,117 +19,152 @@ fetch(`${repoName}/projects/projects.json`)
   .then(r => r.json())
   .then(projects => {
     buildTopProjects(projects);
-    buildBrickRiver(projects);
-  })
-  .catch(err => console.error('projects.json load error:', err));
+
+    // Exclude the top 3 projects for the river
+    const riverProjects = projects.slice(3);
+    buildBrickRiver(riverProjects);
+  });
 
 /* -------------------------
-   Top Projects
+   Top Projects (Inline Display)
 ------------------------- */
 function buildTopProjects(projects) {
   const top = document.getElementById('top-projects-container');
   top.innerHTML = '';
-  const chosen = projects.slice(0, 2);
+  const chosen = projects.slice(0, 3); // first 3 projects
 
-  chosen.forEach(p => {
+  chosen.forEach((p, index) => {
     const card = document.createElement('div');
     card.className = 'top-card';
+    if(index === 0) card.classList.add('first-card');
+
+    // Wrap all content above footer in card-content
+    const cardContent = document.createElement('div');
+    cardContent.className = 'card-content';
+    cardContent.style.display = 'flex';
+    cardContent.style.flexDirection = 'column';
+    cardContent.style.gap = '0.6rem';
+    cardContent.style.flexGrow = '1';
 
     // Title
     const title = document.createElement('div');
     title.className = 'tile-title';
     title.textContent = p.title;
+    cardContent.appendChild(title);
 
-    // Description (non-bold)
-    const desc = document.createElement('div');
-    desc.className = 'tile-desc';
-    desc.style.fontWeight = 'normal';
-    desc.textContent = p.description;
+    // Summary
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'tile-desc';
+    summaryDiv.style.fontWeight = 'normal';
+    summaryDiv.style.fontSize = '0.85rem';
+    summaryDiv.style.margin = '0.5rem 0 1rem 0';
+    summaryDiv.style.opacity = '0.85';
+    summaryDiv.textContent = p.summary || "";
+    cardContent.appendChild(summaryDiv);
+
+    // Description (if exists)
+    if (p.description) {
+      const desc = document.createElement('p');
+      desc.textContent = p.description;
+      desc.style.fontWeight = 'normal';
+      desc.style.marginBottom = '1rem';
+      cardContent.appendChild(desc);
+    }
+
+    // Media container
+    const mediaContainer = document.createElement('div');
+    mediaContainer.style.display = 'flex';
+    mediaContainer.style.flexDirection = 'column';
+    mediaContainer.style.gap = '0.6rem';
+
+    if (p.image) {
+      const img = document.createElement('img');
+      img.src = p.image;
+      img.style.width = '100%';
+      img.style.height = 'auto';
+      img.style.maxHeight = '200px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '12px';
+      mediaContainer.appendChild(img);
+    }
+
+    if (p.video) {
+      const vidWrapper = document.createElement('div');
+      vidWrapper.className = 'video-container';
+      vidWrapper.innerHTML = p.video; // insert iframe
+      vidWrapper.style.width = '100%';
+      vidWrapper.style.overflow = 'hidden';
+      vidWrapper.style.display = 'flex';
+      vidWrapper.style.justifyContent = 'center';
+      mediaContainer.appendChild(vidWrapper);
+    }
+
+    if (p.stl) {
+      const stlWrapper = document.createElement('div');
+      stlWrapper.className = 'stl-container';
+      stlWrapper.innerHTML = `
+        <model-viewer 
+          src='${p.stl}' 
+          alt='${p.title} 3D Model' 
+          camera-controls 
+          auto-rotate 
+          ar 
+          ar-modes='webxr scene-viewer quick-look' 
+          style='width:100%; height:300px; border-radius:12px;'>
+        </model-viewer>
+      `;
+      mediaContainer.appendChild(stlWrapper);
+    }
+
+    cardContent.appendChild(mediaContainer);
+    card.appendChild(cardContent);
+
+    // Footer container: Links + Tools
+    const footerContainer = document.createElement('div');
+    footerContainer.style.display = 'flex';
+    footerContainer.style.flexDirection = 'column';
+    footerContainer.style.gap = '0.5rem';
+    footerContainer.style.marginTop = 'auto'; // push to bottom
+    footerContainer.style.alignItems = 'flex-start';
+
+    // Link button
+    if (p.link) {
+      const linkBtn = document.createElement('a');
+      linkBtn.href = p.link;
+      linkBtn.target = '_blank';
+      linkBtn.textContent = 'Learn More';
+      linkBtn.style.cssText = `
+        display:inline-block;
+        padding:6px 10px;
+        background:#007bff;
+        color:#fff;
+        border-radius:6px;
+        text-decoration:none;
+        font-size:0.9rem;
+        width: fit-content;
+      `;
+      footerContainer.appendChild(linkBtn);
+    }
 
     // Tools container
     const toolsContainer = document.createElement('div');
     toolsContainer.className = 'tile-tools';
-    const allowedTools = ["Python","NumPy","Pandas","OpenCV","Matplotlib","PyTorch","TensorFlow","Keras"];
-    p.tools.forEach(toolName => {
-      if(allowedTools.includes(toolName)) {
-        const img = document.createElement('img');
-        img.className = 'tool-icon';
-        img.src = `${repoName}/assets/images/tools/${toolName}.svg`;
-        img.alt = toolName;
-        toolsContainer.appendChild(img);
-      }
+    toolsContainer.style.display = 'flex';
+    toolsContainer.style.gap = '0.3rem';
+    (p.tools || []).forEach(toolFile => {
+      const img = document.createElement('img');
+      img.src = `${repoName}/assets/images/tools/${toolFile}`;
+      img.alt = toolFile.replace('.svg','');
+      img.style.width = '24px';
+      img.style.height = '24px';
+      toolsContainer.appendChild(img);
     });
 
-    card.append(title, desc, toolsContainer);
+    footerContainer.appendChild(toolsContainer);
+    card.appendChild(footerContainer);
+
     top.appendChild(card);
-
-    // Clickable popup
-    card.addEventListener('click', () => openProjectPopup(p));
   });
-}
-
-/* -------------------------
-   Popup Function
-------------------------- */
-function openProjectPopup(proj, rowTrack = null) {
-  if (rowTrack) rowTrack.dataset.paused = 'true';
-
-  const overlay = document.createElement('div');
-  overlay.id = 'popup-overlay';
-  overlay.style.cssText = `
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center;
-    z-index:1000;
-  `;
-
-  const popup = document.createElement('div');
-  popup.style.cssText = `
-    background: #fff; padding: 20px; border-radius: 12px; max-width: 80%; max-height: 80%; overflow-y: auto;
-  `;
-
-  const title = document.createElement('h2');
-  title.textContent = proj.title;
-  popup.appendChild(title);
-
-  const desc = document.createElement('p');
-  desc.textContent = proj.description;
-  desc.style.fontWeight = 'normal';
-  popup.appendChild(desc);
-
-  if (proj.image) {
-    const img = document.createElement('img');
-    img.src = proj.image;
-    img.style.width = '100%';
-    popup.appendChild(img);
-  } else if (proj.video) {
-    const vid = document.createElement('video');
-    vid.src = proj.video;
-    vid.controls = true;
-    vid.style.width = '100%';
-    popup.appendChild(vid);
-  }
-
-  if (proj.link) {
-    const btn = document.createElement('a');
-    btn.href = proj.link;
-    btn.target = "_blank";
-    btn.textContent = "Learn More";
-    btn.style.cssText = `
-      display:inline-block; margin-top:10px; padding:8px 12px; background:#007bff; color:#fff;
-      border-radius:6px; text-decoration:none;
-    `;
-    popup.appendChild(btn);
-  }
-
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) {
-      overlay.remove();
-      if (rowTrack) rowTrack.dataset.paused = 'false';
-    }
-  });
-
-  overlay.appendChild(popup);
-  document.body.appendChild(overlay);
 }
 
 /* -------------------------
@@ -139,7 +174,7 @@ function buildBrickRiver(projects) {
   const container = document.getElementById('flowing-projects-container');
   container.innerHTML = '';
 
-  const perRow = 5;
+  const perRow = 4;
   const rows = chunk(projects, perRow);
 
   rows.forEach((rowItems, i) => {
@@ -149,7 +184,7 @@ function buildBrickRiver(projects) {
     const track = document.createElement('div');
     track.className = 'flow-track';
     track.dataset.paused = 'false';
-    track.dataset.speed = 0.04 + i*0.01; // slower scroll
+    track.dataset.speed = 0.04 + i*0.01;
     track.dataset.direction = i % 2 === 0 ? 'ltr' : 'rtl';
 
     rowItems.forEach(p => track.appendChild(createProjectCard(p)));
@@ -171,25 +206,41 @@ function chunk(arr, size) {
 function createProjectCard(p) {
   const el = document.createElement('div');
   el.className = 'tile';
+  el.style.display = 'flex';
+  el.style.flexDirection = 'column';
 
-  el.innerHTML = `
-    <div class="tile-title">${p.title}</div>
-    <div class="tile-desc" style="font-weight:normal;">${p.description}</div>
-    <div class="tile-tools"></div>
-  `;
+  const titleDiv = document.createElement('div');
+  titleDiv.className = 'tile-title';
+  titleDiv.textContent = p.title;
+  el.appendChild(titleDiv);
 
-  const toolsContainer = el.querySelector('.tile-tools');
-  const allowedTools = ["Python","NumPy","Pandas","OpenCV","Matplotlib","PyTorch","TensorFlow","Keras"];
-  p.tools.forEach(toolName => {
-    if(allowedTools.includes(toolName)) {
-      const img = document.createElement('img');
-      img.className = 'tool-icon';
-      img.src = `${repoName}/assets/images/tools/${toolName}.svg`;
-      img.alt = toolName;
-      toolsContainer.appendChild(img);
-    }
+  const summaryDiv = document.createElement('div');
+  summaryDiv.className = 'tile-desc';
+  summaryDiv.textContent = p.summary || "";
+  summaryDiv.style.fontSize = '0.95rem';
+  summaryDiv.style.opacity = '0.85';
+  summaryDiv.style.marginBottom = 'auto';
+  el.appendChild(summaryDiv);
+
+  const toolsContainer = document.createElement('div');
+  toolsContainer.style.display = 'flex';
+  toolsContainer.style.alignItems = 'center';
+  toolsContainer.style.gap = '0.3rem';
+  toolsContainer.style.fontStyle = 'italic';
+  toolsContainer.style.marginTop = '2rem';
+
+  (p.tools || []).forEach(toolFile => {
+    const img = document.createElement('img');
+    img.src = `${repoName}/assets/images/tools/${toolFile}`;
+    img.alt = toolFile.replace('.svg','');
+    img.style.width = '24px';
+    img.style.height = '24px';
+    toolsContainer.appendChild(img);
   });
 
+  el.appendChild(toolsContainer);
+
+  // Popup listener for river projects only
   el.addEventListener('click', () => {
     const parentTrack = el.closest('.flow-track');
     openProjectPopup(p, parentTrack);

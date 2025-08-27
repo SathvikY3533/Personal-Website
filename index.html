@@ -1,51 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sathvik Y's Portfolio</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-</head>
-<body class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sathvik Y's Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <script type='module' src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js'></script>
+  </head>
+  <body class="light">
 
-  <!-- Dark Mode Toggle -->
-  <button id="mode-btn" aria-label="Toggle color mode">🌓</button>
+    <!-- Dark Mode Toggle -->
+    <button id="mode-btn" aria-label="Toggle color mode">🌓</button>
 
-  <!-- Hero Section -->
-  <section id="hero" aria-label="Intro">
-    <div class="hero-left">
-      <img src="assets/images/me7.jpg" alt="Profile" class="profile-pic">
-      <div class="hero-text">
-        <h1 class="hero-name">Srikiran Sathvik Yechuri</h1>
-        <p class="hero-desc">ECE Honors @ UT Austin — Class of 2029</p>
+    <!-- Hero Section -->
+    <section id="hero" aria-label="Intro">
+      <div class="hero-left">
+        <img src="assets/images/me7.jpg" alt="Profile" class="profile-pic">
+        <div class="hero-text">
+          <h1 class="hero-name">Srikiran Sathvik Yechuri</h1>
+          <p class="hero-desc">ECE Honors @ UT Austin — Class of 2029</p>
+        </div>
       </div>
-    </div>
-    <div class="hero-right">
-      👋 Howdy! This is where I document my passion projects and research in robotics and computer engineering. Feel free to contact me if you have any questions, or would like to just chat!
-    </div>
-  </section>
-
-  <main id="content">
-    <!-- Top Projects -->
-    <section id="top-projects" aria-labelledby="tp-title">
-      <h2 id="tp-title">Top Projects</h2>
-      <div id="top-projects-container" class="top-grid">Loading projects...</div>
+      <div class="hero-right">
+        👋 Howdy! This is where I document my passion projects and research in robotics and computer engineering. Feel free to contact me if you have any questions, or would like to just chat!
+      </div>
     </section>
 
-    <!-- All Projects: Brick River -->
-    <section id="projects" aria-labelledby="all-title">
-      <h2 id="all-title">All Projects</h2>
-      <div id="flowing-projects-container">Loading projects...</div>
-    </section>
+    <main id="content">
+      <!-- Top Projects -->
+      <section id="top-projects" aria-labelledby="tp-title">
+        <h2 id="tp-title">Top Projects</h2>
+        <div id="top-projects-container" class="top-grid">Loading projects...</div>
+      </section>
 
-    <!-- Test 3D Simulation -->
-    <section id="test-3d" aria-labelledby="sim-title">
-      <h2 id="sim-title">Test 3D Simulation</h2>
-      <div class="test-3d-window" id="3d-viewer">Loading 3D model...</div>
-    </section>
-  </main>
+      <!-- All Projects: Brick River -->
+      <section id="projects" aria-labelledby="all-title">
+        <h2 id="all-title">All Projects</h2>
+        <div id="flowing-projects-container">Loading projects...</div>
+      </section>
 
-  <script type="module" src="script.js"></script>
-</body>
+      <!-- Test 3D Simulation
+      <section id="test-3d" aria-labelledby="sim-title">
+        <h2 id="sim-title">Test 3D Simulation</h2>
+        <div class="test-3d-window" id="3d-viewer">Loading 3D model...</div>
+      </section> -->
+    </main>
+
+    <script type="module" src="script.js"></script>
+  </body>
+  <footer id="footer">
+    <p>Made with ❤️ by Sathvik</p>
+    <p>© 2025 Srikiran Sathvik Yechuri</p>
+  </footer>
 </html>

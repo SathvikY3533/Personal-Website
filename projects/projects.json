@@ -1,52 +1,123 @@
 [
   {
-    "title": "Python App",
-    "description": "I created a Python app over the summer that could detect emotions from the human face.",
-    "tools": ["Python", "NumPy", "OpenCV", "TensorFlow", "Flask"]
+    "title": "ROS2 & Gazebo Robotics Simulation",
+    "summary": "#TODO",
+    "role": "Personal Passion Project",
+    "description": "",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "PCBDesign.svg"
+    ],
+    "video": ""
   },
   {
-    "title": "3D Robot Simulation",
-    "description": "Built a robot simulation using Three.js and WebGL to visualize robot movements in 3D.",
-    "tools": ["ThreeJS", "JavaScript", "HTML", "CSS"]
+    "title": "Bio-Inspired Robotics Research - Energy Efficiency",
+    "summary": "Protoyped three bio-nspired robots to research the best combination of locomotion and energy efficiency, integrating CAD with custom PCB creation to create the robot and run simple commands with Python.",
+    "role": "Independent Researcher, ISM Program @ Liberty HS",
+    "description": "Led a year-long ISM research initiative focused on energy-efficient bio-inspired robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like locomotion. Engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer. Presented final blueprint at the ISM End-of-Year Showcase.",
+    "link": "https://sathvikyechuri.wixsite.com/ismportfolio",
+    "tools": [
+      "Python.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "PCBDesign.svg"
+    ],
+    "video": "",
+    "stl": "/assets/models/test_ism_robot.stl"
   },
   {
-    "title": "Arduino Rover",
-    "description": "Designed a remote-controlled rover using Arduino and motor drivers.",
-    "tools": ["Arduino", "C++", "Electronics"]
+  "title": "FRC Robotics - Team 7503 Radicubs",
+  "summary": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition, integrating CAD, autonomous programming, pneumatics, and embedded systems.",
+  "role": "Senior Captain & Drive Team Lead",
+  "description": "Oversaw robot design and build for FRC competitions, including CAD prototyping in Fusion 360, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
+  "link": "",
+  "tools": [
+    "Fusion360.svg",
+    "Python.svg",
+    "CPlusPlus.svg"
+  ],
+  "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
   },
   {
-    "title": "Web Portfolio",
-    "description": "Developed my personal portfolio website with interactive project tiles and dark mode.",
-    "tools": ["HTML", "CSS", "JavaScript"]
+    "title": "Alertify - Public Safety App",
+    "summary": "Developed a Swift-based mobile app to alert school security systems during life-threatening scenarios, integrating Firebase and Twilio APIs.",
+    "role": "Project Lead, Congressional App Challenge",
+    "description": "Designed and built Alertify, a mobile app for emergency alerts in school environments. Conducted user research, built frontend in Swift/Xcode, and implemented backend with Firebase and Twilio APIs for real-time messaging. Recognized by Congressman Pat Fallon for innovation in public safety.",
+    "link": "",
+    "tools": [
+      "Xcode.svg",
+      "Firebase.svg"
+    ],
+    "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/dZ90oKxldtE?si=Go2QnGKW_Lx8jiVP' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>"
   },
   {
-    "title": "Machine Learning Model",
-    "description": "Trained a neural network to classify handwritten digits.",
-    "tools": ["Python", "NumPy", "TensorFlow", "Keras"]
+    "title": "Emotion Detection for Autism Support",
+    "summary": "Built a CNN-based emotion detection model using OpenCV to support children with autism, as part of Inspirit AI research.",
+    "role": "Scholar & Independent Researcher",
+    "description": "Collaborated on an emotion detection model using CNNs and OpenCV to help children with autism. Explored reinforcement learning for robotic control tasks like pendulum balancing. Mentored by researchers from Brown and Harvard, and earned DeepLearning.AI certification.",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "TensorFlow.svg",
+      "Keras.svg"
+    ],
+    "video": ""
   },
   {
-    "title": "CAD 3D Puzzle",
-    "description": "Designed an intricate 3D puzzle using Fusion360.",
-    "tools": ["Fusion360", "CAD"]
+    "title": "DIY Hand Crank Generator",
+    "summary": "#TODO",
+    "role": "Research Intern, UT Dallas CVMC Lab",
+    "description": "Interned at UT Dallas CVMC Lab under Prof. Yapeng Tian. Led research on Active Speaker Detection using computer vision and audio streams. Developed Deep Q-learning models and presented findings to faculty. Drafting manuscript for Journal of Student Research.",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "TensorFlow.svg"
+    ],
+    "video": ""
   },
   {
-    "title": "Physics Experiment Visualizer",
-    "description": "Interactive web app that visualizes physics experiments and concepts.",
-    "tools": ["JavaScript", "HTML", "CSS", "ThreeJS"]
+    "title": "DIY Air Quality Monitoring System",
+    "summary": "Engineered a low-cost air and water quality monitoring system using Raspberry Pi and custom sensors, logging real-time data for analysis.",
+    "role": "Project Lead, Utah Pithon Challenge",
+    "description": "Built a Raspberry Pi-based system to monitor air and water quality using PM2.5/PM10 sensors and a DIY turbidity sensor. Displayed data on an LCD and logged to CSV files. Simulated unhealthy conditions to test accuracy. Earned second place and a $250 award.",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "CSV.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg"
+    ],
+    "video": ""
   },
   {
-    "title": "Boxing Tracker",
-    "description": "Built an app to track and analyze boxing workouts.",
-    "tools": ["Python", "Flask", "Matplotlib"]
+    "title": "Active Speaker Detection Research @ UTD",
+    "summary": "Researched and developed models for detecting active speakers in multimodal scenarios using computer vision and audio analysis.",
+    "role": "Research Intern, UT Dallas CVMC Lab",
+    "description": "Interned at UT Dallas CVMC Lab under Prof. Yapeng Tian. Led research on Active Speaker Detection using computer vision and audio streams. Developed Deep Q-learning models and presented findings to faculty. Drafting manuscript for Journal of Student Research.",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "TensorFlow.svg"
+    ],
+    "video": ""
   },
   {
-    "title": "Robotic Hand Prototype",
-    "description": "Created a bio-inspired robotic hand for manipulating objects.",
-    "tools": ["Arduino", "C++", "Electronics", "3DPrinting"]
-  },
-  {
-    "title": "Chess AI",
-    "description": "Developed a chess AI that plays with minimax and alpha-beta pruning.",
-    "tools": ["Python", "NumPy"]
+    "title": "AI Facial Emotion based Therapy Bot",
+    "summary": "Built a mental health chatbot using facial emotion recognition and OpenAI LLMs, placing 4th out of 107 submissions.",
+    "role": "Hackathon Finalist",
+    "description": "Developed a therapy chatbot that uses YOLO and OpenCV for live emotion detection and OpenAI LLMs for generating therapist-like responses. Placed 4th out of 107 entries at UTD’s AI For All Hackathon in 2023.",
+    "link": "",
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "OpenAI.svg"
+    ],
+    "video": ""
   }
 ]

@@ -65,64 +65,140 @@ section{
 }
 h2{ font-size: 2rem; text-align: left; margin-bottom: 2rem; }
 
+/* -------------------------
+   Top Projects Grid
+------------------------- */
 .top-grid{
   display: flex;
-  gap: 1.5rem;
   flex-wrap: wrap;
+  gap: 1.5rem; /* space between tiles */
 }
 
-.top-card{
-  background: white;
-  border-radius: 14px;
-  min-height: 180px;
+/* Top cards as flex column */
+.top-card {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 1.25rem;
+  border-radius: 14px;
+  background: white;
   box-shadow: var(--card-shadow);
-  font-family: 'Fredoka One', cursive;
-  font-size: 1.25rem;
-  text-align: left;
+  padding: 1.25rem;
   border: 1px solid rgba(0,0,0,0.06);
-  flex: 1 1 calc(50% - 0.75rem); /* two cards per row with gap */
+  overflow: hidden;
+  flex: 1 1 calc(50% - 0.75rem);
 }
 
-/* Ensure top-card descriptions are not bold */
+.top-card.first-card {
+  flex: 1 1 100%;
+}
+
+/* New container for content above tools */
+.top-card .card-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* takes all available space above tools */
+  gap: 0.5rem;
+}
+
+/* Summary text */
 .top-card .tile-desc {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.85rem;
   opacity: 0.85;
 }
 
-body.dark .top-card{ background: #333; color: var(--text-dark); }
-
-@media (max-width: 820px){ 
-  .top-card{ flex: 1 1 100%; }
+/* Media elements */
+.top-card img,
+.top-card iframe,
+.top-card video {
+  width: 100%;
+  border-radius: 12px;
 }
 
-.flow-row{
+/* Tools at the bottom */
+.top-card .tile-tools {
+  display: flex;
+  flex-wrap: nowrap; /* keep on one line */
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem; /* small gap from content */
+}
+
+
+/* Tool icons */
+.top-card .tile-tools img {
+  width: 24px;
+  height: 24px;
+}
+
+/* Link/Button style */
+.top-card a {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #007bff;
+  color: #fff;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  width: fit-content;
+  margin-top: 0.6rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.top-card a:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+}
+
+/* Grid spacing */
+.top-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem; /* keeps spacing consistent */
+}
+
+/* Lock width for second-row cards */
+.top-card:not(.first-card) {
+  flex: 1 1 48%;
+  max-width: 48%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 820px){ 
+  .top-card { 
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+
+
+
+/* All Projects spacing */
+#projects { padding-bottom: 1rem; }
+#flowing-projects-container { margin-top: 1rem; padding-bottom: 2rem; }
+
+.flow-row {
+  position: relative;
   overflow: hidden;
   margin-block: var(--gap-v);
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 3rem, black calc(100% - 3rem), transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0, black 3rem, black calc(100% - 3rem), transparent 100%);
+  width: 65vw;
+  left: 50%;
+  margin-left: -30vw;
+  padding-inline: 1rem; /* small margin on both sides */
+  
+  /* keep the fade at edges */
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 2rem, black calc(100% - 2rem), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 2rem, black calc(100% - 2rem), transparent 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
+
 
 .flow-track {
   display: flex;
   gap: var(--gap-h);
   width: max-content;
   will-change: transform;
-  /* removed animation */
 }
-.flow-row.left-to-right .flow-track,
-.flow-row.right-to-left .flow-track {
-  /* animation removed */
-}
-.flow-row:hover .flow-track {
-  /* animation-play-state removed */
-}
-
 
 .tile{
   flex: 0 0 auto;
@@ -173,6 +249,9 @@ body.dark .tile{ background: #333; color: var(--text-dark); }
 
 .tile-active { border: 2px solid #0077ff; }
 
+/* Popup Overlay and other styles remain unchanged... (everything from your original CSS is still included here) */
+
+
 @keyframes scroll-ltr{ from{ transform: translateX(-50%); } to{ transform: translateX(0%); } }
 @keyframes scroll-rtl{ from{ transform: translateX(0%); } to{ transform: translateX(-50%); } }
 
@@ -222,3 +301,113 @@ body.dark #popup-overlay > div { background: #333; color: var(--text-dark); }
   display:inline-block; padding:10px 16px; background:#007bff; color:#fff; border-radius:8px; text-decoration:none; font-weight:500;
 }
 #popup-overlay a:hover { background:#0056b3; }
+
+/* ------------------------- POPUP STYLES FOR NEW JSON STRUCTURE ------------------------- */
+
+/* Popup Overlay & Container */
+#popup-overlay {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.7);
+  display:flex; align-items:center; justify-content:center;
+  z-index:1000;
+}
+
+#popup-overlay > div {
+  background: white;
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 800px;
+  width: 90%;
+  max-height: 85%;
+  overflow-y: auto;
+  box-shadow: var(--card-shadow-strong);
+  font-family: 'Montserrat', sans-serif;
+  transition: transform .25s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+body.dark #popup-overlay > div { background: #333; color: var(--text-dark); }
+
+/* Popup text and subheading */
+#popup-overlay h2 {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.8rem;
+  margin-bottom: 0.2rem;
+}
+#popup-overlay h3 {
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.85;
+}
+#popup-overlay p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin-bottom: 0.6rem;
+}
+
+/* Popup media */
+#popup-overlay img,
+#popup-overlay video,
+#popup-overlay iframe {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+#popup-overlay iframe {
+  height: 400px;
+  border: none;
+}
+
+/* External link button */
+#popup-overlay a {
+  display:inline-block;
+  padding:10px 16px;
+  background:#007bff;
+  color:#fff;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:500;
+}
+#popup-overlay a:hover { background:#0056b3; }
+
+/* ------------------------- VIDEO STYLES POPUP ------------------------- */
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+/* ------------------------- 3D Model Styles ------------------------- */
+
+.stl-container model-viewer {
+  width: 100%;
+  height: 300px; /* adjust as needed */
+  border-radius: 12px;
+}
+
+
+
+
+
+#footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-light);
+  opacity: 0.7;
+}
