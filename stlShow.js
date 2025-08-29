@@ -14,6 +14,11 @@ export function showSTL(containerId, stlPath) {
   renderer.setSize(container.clientWidth, container.clientHeight);
   container.appendChild(renderer.domElement);
 
+  const indicator = document.createElement('div');
+  indicator.className = 'drag-indicator';
+  //indicator.textContent = '👆 Drag to view';
+  container.appendChild(indicator);
+
   const ambientLight = new THREE.AmbientLight(0xcccccc, 1);
   scene.add(ambientLight);
   const dirLight = new THREE.DirectionalLight(0xffffff, 1);
@@ -28,6 +33,16 @@ export function showSTL(containerId, stlPath) {
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
+
+    let hasInteracted = false;
+
+    controls.addEventListener('start', () => {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        indicator.style.opacity = '0';
+        setTimeout(() => indicator.remove(), 300); // optional: remove after fade
+      }
+    });// Hide indicator on first interaction
 
     function animate() {
       requestAnimationFrame(animate);

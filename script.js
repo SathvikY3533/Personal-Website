@@ -7,7 +7,6 @@ document.getElementById('mode-btn').addEventListener('click', () => {
 
 import { showSTL } from './stlShow.js';
 
-
 /* -------------------------
    Determine Base Path
 ------------------------- */
@@ -89,16 +88,35 @@ function buildTopProjects(projects) {
       mediaContainer.appendChild(img);
     }
 
-    if (p.video) {
+   if (p.video) {
       const vidWrapper = document.createElement('div');
       vidWrapper.className = 'video-container';
-      vidWrapper.innerHTML = p.video; // insert iframe
       vidWrapper.style.width = '100%';
       vidWrapper.style.overflow = 'hidden';
       vidWrapper.style.display = 'flex';
       vidWrapper.style.justifyContent = 'center';
+
+      // Check if it's a YouTube embed (iframe string)
+      if (p.video.includes("iframe")) {
+        vidWrapper.innerHTML = p.video; // Insert iframe directly
+      } 
+      // Otherwise treat it as local video file
+      else if (p.video.endsWith(".mp4")) {
+        const videoEl = document.createElement('video');
+        videoEl.src = p.video; // relative or absolute path
+        videoEl.controls = true;
+        videoEl.style.minHeight = "500px";
+        videoEl.style.backgroundColor = "black"; // just to see if it's rendering
+        videoEl.style.maxWidth = "100%";
+        videoEl.style.borderRadius = "8px";
+        videoEl.autoplay = true;
+        videoEl.muted = true;
+        vidWrapper.appendChild(videoEl);
+      }
+
       cardContent.appendChild(vidWrapper);
     }
+
 
     if (p.stl) {
       const stlWrapper = document.createElement('div');
@@ -207,6 +225,35 @@ function chunk(arr, size) {
   return out;
 }
 
+function openProjectPopup(project, trackElement) {
+  // Create popup container
+  const popup = document.createElement('div');
+  popup.className = 'project-popup';
+  popup.style.position = 'fixed';
+  popup.style.top = '50%';
+  popup.style.left = '50%';
+  popup.style.transform = 'translate(-50%, -50%)';
+  popup.style.background = '#fff';
+  popup.style.padding = '2rem';
+  popup.style.borderRadius = '12px';
+  popup.style.boxShadow = '0 12px 28px rgba(0,0,0,0.15)';
+  popup.style.zIndex = '1000';
+
+  // Add content
+  popup.innerHTML = `
+    <h3>${project.title}</h3>
+    <p>${project.description || project.summary}</p>
+    <button id="close-popup">Close</button>
+  `;
+
+  document.body.appendChild(popup);
+
+  // Close button
+  document.getElementById('close-popup').addEventListener('click', () => {
+    popup.remove();
+  });
+}
+
 function createProjectCard(p) {
   const el = document.createElement('div');
   el.className = 'tile';
@@ -241,6 +288,7 @@ function createProjectCard(p) {
     img.style.height = '24px';
     toolsContainer.appendChild(img);
   });
+
 
   el.appendChild(toolsContainer);
 

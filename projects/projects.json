@@ -1,45 +1,28 @@
 [
   {
     "title": "ROS2 & Gazebo Robotics Simulation",
-    "summary": "#TODO",
     "role": "Personal Passion Project",
-    "description": "",
+    "description": "Designed and simulated a custom robot in ROS2 and Gazebo, utilizing the publish-subscribe model for sensor integration, control, and navigation. I pursued this project after my senior year (gaduated high school) as a continuation of my ISM dog robot project seen in the project tile below. Iwanted to run simulations wish my dog robot with a industry certified tool like ROS2. In jus tunder 3 weeks I accomplished an intermediate level of proficiency in the ROS2 framework, and its methos of communication with simulator like RViz and Gazebo through Udemy certifications. Future Plans: During my freshman year as a ECE major at UT Austin, I plan to implement the 3D .stl model of my robot design into Gazebo and start programming its limbs and test its movement virtually!",
     "link": "",
-    "tools": [
-      "Python.svg",
-      "Fusion360.svg",
-      "3DPrinting.svg",
-      "PCBDesign.svg"
-    ],
-    "video": ""
+    "tools": ["Python.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
+    "video": "/assets/videos/GazeboSimVideo.mp4"
   },
   {
     "title": "Bio-Inspired Robotics Research - Energy Efficiency",
-    "summary": "Protoyped three bio-nspired robots to research the best combination of locomotion and energy efficiency, integrating CAD with custom PCB creation to create the robot and run simple commands with Python.",
     "role": "Independent Researcher, ISM Program @ Liberty HS",
-    "description": "Led a year-long ISM research initiative focused on energy-efficient bio-inspired robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like locomotion. Engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer. Presented final blueprint at the ISM End-of-Year Showcase.",
+    "description": "Prototyped three bio-inspired robots to explore optimal locomotion and energy efficiency. Led a year-long ISM research initiative focused on robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like movement. Engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer. Presented final blueprint at the ISM End-of-Year Showcase.",
     "link": "https://sathvikyechuri.wixsite.com/ismportfolio",
-    "tools": [
-      "Python.svg",
-      "Fusion360.svg",
-      "3DPrinting.svg",
-      "PCBDesign.svg"
-    ],
+    "tools": ["Python.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
     "video": "",
     "stl": "/assets/models/test_ism_robot.stl"
   },
   {
-  "title": "FRC Robotics - Team 7503 Radicubs",
-  "summary": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition, integrating CAD, autonomous programming, pneumatics, and embedded systems.",
-  "role": "Senior Captain & Drive Team Lead",
-  "description": "Oversaw robot design and build for FRC competitions, including CAD prototyping in Fusion 360, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
-  "link": "",
-  "tools": [
-    "Fusion360.svg",
-    "Python.svg",
-    "CPlusPlus.svg"
-  ],
-  "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+    "title": "FRC Robotics – Team 7503 Radicubs",
+    "role": "Senior Captain & Drive Team Lead",
+    "description": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition. Oversaw CAD prototyping in Fusion 360, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
+    "link": "",
+    "tools": ["Fusion360.svg", "Python.svg", "CPlusPlus.svg"],
+    "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
   },
   {
     "title": "Alertify - Public Safety App",
