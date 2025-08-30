@@ -2,7 +2,7 @@
   {
     "title": "ROS2 & Gazebo Robotics Simulation",
     "role": "Personal Passion Project",
-    "description": "Designed and simulated a custom robot in ROS2 and Gazebo, utilizing the publish-subscribe model for sensor integration, control, and navigation. I pursued this project after my senior year (gaduated high school) as a continuation of my ISM dog robot project seen in the project tile below. Iwanted to run simulations wish my dog robot with a industry certified tool like ROS2. In jus tunder 3 weeks I accomplished an intermediate level of proficiency in the ROS2 framework, and its methos of communication with simulator like RViz and Gazebo through Udemy certifications. Future Plans: During my freshman year as a ECE major at UT Austin, I plan to implement the 3D .stl model of my robot design into Gazebo and start programming its limbs and test its movement virtually!",
+    "description": "Designed and simulated a custom robot in ROS2 and Gazebo, utilizing the publish-subscribe model for sensor integration, control, and navigation. I pursued this project after my senior year (gaduated high school) as a continuation of my ISM dog robot project seen in the project tile below. I wanted to run simulations of my dog robot with a industry certified tool like ROS2. In just under 3 weeks I accomplished an intermediate level of proficiency in the ROS2 framework, and its methods of communication with simulator like RViz and Gazebo through Udemy certifications. Future Plans: During my freshman year as an ECE Honors major at UT Austin, I plan to implement the 3D .stl model of my robot design into Gazebo and start programming its limbs and test its movement virtually before running the ROS2 framework on the real bot.",
     "link": "",
     "tools": ["Python.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
     "video": "/assets/videos/GazeboSimVideo.mp4"
@@ -10,7 +10,7 @@
   {
     "title": "Bio-Inspired Robotics Research - Energy Efficiency",
     "role": "Independent Researcher, ISM Program @ Liberty HS",
-    "description": "Prototyped three bio-inspired robots to explore optimal locomotion and energy efficiency. Led a year-long ISM research initiative focused on robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like movement. Engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer. Presented final blueprint at the ISM End-of-Year Showcase.",
+    "description": "Prototyped three bio-inspired robots to explore optimal locomotion and energy efficiency. Led a year-long ISM research initiative focused on robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like movement, engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer, and finally presented at the ISM End-of-Year Showcase with the entire school district.",
     "link": "https://sathvikyechuri.wixsite.com/ismportfolio",
     "tools": ["Python.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
     "video": "",
@@ -19,7 +19,7 @@
   {
     "title": "FRC Robotics – Team 7503 Radicubs",
     "role": "Senior Captain & Drive Team Lead",
-    "description": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition. Oversaw CAD prototyping in Fusion 360, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
+    "description": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition, oversaw and thoroughly led CAD prototyping in Fusion 360 for two straight seasons, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
     "link": "",
     "tools": ["Fusion360.svg", "Python.svg", "CPlusPlus.svg"],
     "video": "<iframe width='560' height='315' src='https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
@@ -52,14 +52,17 @@
   },
   {
     "title": "DIY Hand Crank Generator",
-    "summary": "#TODO",
+    "summary": "After learning about electromagnetic induction from my Physics 2 class, I went on to test the theory with my own hand crank geenrator. I modeled and 3D-printed two beveled gears, with the big gear haing six magnets attached while theree coils where there stationary and in series to induce current. I was able to generate 1 V of pottential difference.",
     "role": "Research Intern, UT Dallas CVMC Lab",
     "description": "Interned at UT Dallas CVMC Lab under Prof. Yapeng Tian. Led research on Active Speaker Detection using computer vision and audio streams. Developed Deep Q-learning models and presented findings to faculty. Drafting manuscript for Journal of Student Research.",
     "link": "",
     "tools": [
       "Python.svg",
       "OpenCV.svg",
-      "TensorFlow.svg"
+      "TensorFlow.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "PCBDesign.svg"
     ],
     "video": ""
   },
