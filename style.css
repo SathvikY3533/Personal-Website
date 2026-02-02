@@ -176,7 +176,6 @@ body.dark .top-card {
 /* Lock width for second-row cards */
 .top-card:not(.first-card) {
   flex: 1 1 48%;
-  max-width: 48%;
 }
 
 @media (max-width: 800px) {
