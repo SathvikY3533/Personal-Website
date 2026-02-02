@@ -178,7 +178,7 @@ body.dark .top-card {
   flex: 1 1 48%;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 800px) { /* phone */
   html {
     font-size: clamp(14px, 4vw, 16px);
   }
@@ -213,8 +213,6 @@ body.dark .top-card {
   }
 
   .my_intro {
-    width: 200vw;
-    margin-left: -53vw;
     padding: 1rem 0;
     box-sizing: border-box;
   }
