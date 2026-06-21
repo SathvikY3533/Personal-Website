@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Sathvik Y's Portfolio</title>
     <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
-    <script type='module' src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js'></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body class="dark">
 
@@ -17,6 +17,7 @@
       <div class="hero-left">
         <img src="assets/images/me7.jpg" alt="Profile" class="profile-pic">
         <div class="hero-text">
+          <p class="hero-tag">// robotics &amp; embedded systems</p>
           <h1 class="hero-name">Srikiran Sathvik Yechuri</h1>
           <p class="hero-desc">ECE Honors @ UT Austin — Class of 2029</p>
         </div>
@@ -34,10 +35,11 @@
         <div id="top-projects-container" class="top-grid">Loading projects...</div>
       </section>
 
-      <!-- All Projects: Brick River -->
+      <!-- All Projects: filterable index -->
       <section id="projects" aria-labelledby="all-title">
-        <h2 id="all-title">All Projects</h2>
-        <div id="flowing-projects-container">Loading projects...</div>
+        <h2 id="all-title">Project Index</h2>
+        <div id="filter-bar" class="filter-bar"></div>
+        <div id="index-container" class="project-grid">Loading projects...</div>
       </section>
     </main>
 
