@@ -1,5 +1,33 @@
 [
   {
+    "title": "Controls Leader PCB — LHR Solar Car",
+    "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
+    "date": "Fall 2025 - Present",
+    "featured": true,
+    "priority": 1,
+    "summary": "Custom STM32L4-based PCB serving as the solar car's central hub for all driver-dashboard and steering wheel inputs — 15+ functions buffered and transmitted over 3 CAN bus lines at 500 kbps via thread-safe FreeRTOS firmware.",
+    "description": "Designed a custom PCB that acts as the central hub for human-machine interface inputs on UT Austin's Longhorn Racing solar car. The board interfaces 15+ driver-dashboard functions and GPIO inputs — ignition, gear selection, cruise control, regen, hazards, turn indicators, and horn — with an STM32L4 MCU, transmitting all buffered signals across 3 CAN bus lines at 500 kbps to every peripheral board through a thread-safe FreeRTOS code structure. Built a protected 24V→5V→3.3V power system with buck/LDO stages, reverse-polarity protection, and consistent noise filtering for reliable operation in any environment, plus isolated power and ground dedicated to the dual CAN transceiver interfaces. Developed MOSFET-based input protection and op-amp buffer circuits to isolate sensors from the MCU GPIOs, minimizing current draw and ensuring clean, debounced signal acquisition. Collaborated with mechanical teams to meet packaging requirements, iterating through RevA/RevB hardware revision cycles with schematic reviews and design rule checks, while co-developing low-level C firmware for real-time signal handling.",
+    "link": "",
+    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "FreeRTOS", "CAN Bus", "Oscilloscope"],
+    "media": [
+      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028114247c4e0b325beba?mode=embed", "caption": "Controls Leader PCB — interactive 3D view (drag to rotate)" }
+    ]
+  },
+  {
+    "title": "Pedals Board PCB — LHR Solar Car",
+    "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
+    "date": "Fall 2025 - Present",
+    "featured": true,
+    "priority": 2,
+    "summary": "Custom STM32G4-based PCB reading brake & accelerator pedal inputs and brake-line pressure — buffered analog signals, redundant sensing paths, and processed data transmitted over CAN.",
+    "description": "Designed a custom PCB that interfaces the solar car's brake and accelerator pedal inputs and measures brake-line pressure, buffering the analog signals before feeding them into an STM32G4's ADC inputs and transmitting the processed data over CAN. The board is a pedal daughter board that mates with the Peripheral Sensing/Output Module (PSOM) to sense linear potentiometers and the brake-line pressure sensor. Integrated UART debugging for thorough system testing of each ADC input and its data processing in real time, enabling both hardware- and software-level signal verification. Leveraged redundant sensing paths and signal shielding to improve data integrity and reduce the impact of noise and EMI on safety-critical control signals.",
+    "link": "",
+    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "CAN Bus", "UART", "Oscilloscope"],
+    "media": [
+      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b602811ba5cb79e55acdcd2?mode=embed", "caption": "Pedals Board PCB — interactive 3D view (drag to rotate)" }
+    ]
+  },
+  {
     "title": "ROS2 & Gazebo Robotics Simulation",
     "role": "Personal Passion Project",
     "date": "Summer 2025",

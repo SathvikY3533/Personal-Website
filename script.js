@@ -9,14 +9,16 @@ document.getElementById('mode-btn').addEventListener('click', () => {
    Load Projects
 ========================================================= */
 let allProjects = [];
+let rawProjects = []; // un-normalized copy, used when saving edits locally
 
 fetch(`/projects/projects.json`)
   .then(r => r.json())
   .then(data => {
+    rawProjects = data;
     allProjects = data.map(normalizeProject);
 
-    const featured = allProjects.filter(p => p.featured);
-    const topList = featured.length > 0 ? featured : allProjects.slice(0, 3);
+    const featured = sortByDateDesc(allProjects.filter(p => p.featured));
+    const topList = featured.length > 0 ? featured : sortByDateDesc(allProjects).slice(0, 3);
 
     buildTopProjects(topList);
     buildProjectIndex(allProjects);
@@ -82,7 +84,7 @@ function buildTopProjects(projects) {
   const container = document.getElementById('top-projects-container');
   container.innerHTML = '';
 
-  projects.slice(0, 3).forEach((p, index) => {
+  projects.slice(0, 4).forEach((p, index) => {
     container.appendChild(buildTopCard(p, index === 0));
   });
 }
@@ -191,6 +193,18 @@ function buildInlineCardMedia(m, project) {
       });
       return wrap;
     }
+    case 'sketchfab':
+    case 'pcb-iframe': {
+      const wrap = document.createElement('div');
+      wrap.className = 'video-container card-media-youtube';
+      const iframe = document.createElement('iframe');
+      iframe.src = m.src;
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      iframe.setAttribute('frameborder', '0');
+      wrap.appendChild(iframe);
+      return wrap;
+    }
     default:
       return null;
   }
@@ -289,15 +303,22 @@ function buildIndexGrid(sorted) {
 }
 
 function sortByDateDesc(projects) {
+  // Projects with a "priority" number come first (1 = top, 2 = next, ...),
+  // then everything else sorted by year (newest first), then undated ones.
+  const prioritized = projects
+    .filter(p => Number.isFinite(p.priority))
+    .sort((a, b) => a.priority - b.priority);
+
+  const rest = projects.filter(p => !Number.isFinite(p.priority));
   const withYear = [];
   const withoutYear = [];
-  projects.forEach(p => {
+  rest.forEach(p => {
     const match = (p.date || '').match(/(\d{4})(?!.*\d{4})/);
     if (match) withYear.push({ p, year: parseInt(match[1], 10) });
     else withoutYear.push(p);
   });
   withYear.sort((a, b) => b.year - a.year);
-  return [...withYear.map(x => x.p), ...withoutYear];
+  return [...prioritized, ...withYear.map(x => x.p), ...withoutYear];
 }
 
 /* =========================================================
@@ -533,19 +554,25 @@ function renderMediaInto(container, m, project) {
       break;
     }
     case 'sketchfab': {
+      const wrap = document.createElement('div');
+      wrap.className = 'gallery-embed';
       const iframe = document.createElement('iframe');
       iframe.src = m.src;
       iframe.className = 'gallery-iframe';
       iframe.allow = 'autoplay; fullscreen; xr-spatial-tracking';
-      container.appendChild(iframe);
+      wrap.appendChild(iframe);
+      container.appendChild(wrap);
       break;
     }
     case 'pcb-iframe':
     case 'iframe': {
+      const wrap = document.createElement('div');
+      wrap.className = 'gallery-embed';
       const iframe = document.createElement('iframe');
       iframe.src = m.src;
       iframe.className = 'gallery-iframe';
-      container.appendChild(iframe);
+      wrap.appendChild(iframe);
+      container.appendChild(wrap);
       break;
     }
     default:
@@ -554,22 +581,18 @@ function renderMediaInto(container, m, project) {
 }
 
 /* =========================================================
-   Owner-only Add / Edit Project tooling
+   Local-only Add / Edit Project tooling
+   - Only active when the site is opened on localhost via
+     `python serve.py` — the buttons don't exist at all on
+     the deployed (GitHub Pages) site.
    - A near-invisible dot in the bottom-right corner of the
      page (add a new project) and of every project card (edit
      that project).
-   - Both are gated behind a password prompt. NOTE: this is a
-     casual deterrent, not real security — the check runs in
-     client-side JS that anyone can view in the page source.
-   - Submitting opens a pre-filled GitHub Issue using YOUR
-     logged-in GitHub session (no token ever touches the
-     browser). A GitHub Action in this repo
-     (.github/workflows/manage-projects.yml) reads the issue
-     and commits the change to projects/projects.json
-     automatically, then closes the issue.
+   - Saving POSTs the updated projects array to /api/projects,
+     which serve.py writes straight to projects/projects.json
+     on disk. Changes stay local until you commit + push.
 ========================================================= */
-const ADD_PROJECT_PASSWORD = '7898';
-const GITHUB_REPO = 'SathvikY3533/Personal-Website';
+const IS_LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
 
 const TOOL_ICON_NAMES = [
   '3DPrinting', 'Arduino', 'CPlusPlus', 'CSS3', 'CSV',
@@ -600,72 +623,26 @@ const MEDIA_TYPE_OPTIONS = [
 ];
 
 function initAddProjectFab() {
+  if (!IS_LOCAL) return; // editing tools only exist on localhost
   const fab = document.createElement('button');
   fab.className = 'fab-add';
   fab.setAttribute('aria-label', 'Owner tools');
-  fab.addEventListener('click', () => openPasswordPrompt(() => openProjectForm()));
+  fab.addEventListener('click', () => openProjectForm());
   document.body.appendChild(fab);
 }
 
 // Tiny edit dot attached to the bottom-right corner of a project card.
 function attachEditBubble(cardEl, project) {
+  if (!IS_LOCAL) return; // editing tools only exist on localhost
   cardEl.style.position = cardEl.style.position || 'relative';
   const dot = document.createElement('button');
   dot.className = 'edit-bubble';
   dot.setAttribute('aria-label', 'Edit this project');
   dot.addEventListener('click', e => {
     e.stopPropagation();
-    openPasswordPrompt(() => openProjectForm(project));
+    openProjectForm(project);
   });
   cardEl.appendChild(dot);
-}
-
-function openPasswordPrompt(onSuccess) {
-  const card = openOverlayShell('password-modal-card');
-  card.appendChild(buildModalHeader({ title: 'Owner access' }));
-
-  const body = document.createElement('div');
-  body.className = 'modal-body';
-
-  const form = document.createElement('div');
-  form.className = 'password-form';
-
-  const input = document.createElement('input');
-  input.type = 'password';
-  input.inputMode = 'numeric';
-  input.maxLength = 12;
-  input.placeholder = '••••';
-  input.autocomplete = 'off';
-
-  const error = document.createElement('div');
-  error.className = 'password-error';
-
-  const submitBtn = document.createElement('button');
-  submitBtn.type = 'button';
-  submitBtn.textContent = 'Unlock';
-
-  function attempt() {
-    if (input.value === ADD_PROJECT_PASSWORD) {
-      onSuccess();
-    } else {
-      error.textContent = 'Incorrect password';
-      form.classList.remove('password-shake');
-      requestAnimationFrame(() => form.classList.add('password-shake'));
-      input.value = '';
-      input.focus();
-    }
-  }
-
-  submitBtn.addEventListener('click', attempt);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
-
-  form.appendChild(input);
-  form.appendChild(error);
-  form.appendChild(submitBtn);
-  body.appendChild(form);
-  card.appendChild(body);
-
-  requestAnimationFrame(() => input.focus());
 }
 
 function field(labelText, inputEl, inline) {
@@ -729,20 +706,19 @@ function addMediaEntry(container, prefill) {
   container.appendChild(entry);
 }
 
-// Builds a GitHub "new issue" URL pre-filled with a fenced JSON block,
-// and opens it in a new tab using the visitor's own logged-in GitHub
-// session. No credentials of any kind are embedded in this code.
-function openGithubIssue(titlePrefix, titleText, payloadObj) {
-  const issueTitle = `${titlePrefix} ${titleText || 'Untitled'}`;
-  const body = [
-    '_Auto-generated by the site\'s project form. A GitHub Action will read the JSON block below and apply it automatically — please don\'t edit it by hand._',
-    '',
-    '```json',
-    JSON.stringify(payloadObj, null, 2),
-    '```',
-  ].join('\n');
-  const url = `https://github.com/${GITHUB_REPO}/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(body)}`;
-  window.open(url, '_blank', 'noopener');
+// POSTs the full updated projects array to the local dev server
+// (serve.py), which writes it to projects/projects.json on disk.
+// Returns a promise that resolves on success.
+function saveProjectsToDisk(updatedArray) {
+  return fetch('/api/projects', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatedArray),
+  }).then(async r => {
+    const res = await r.json().catch(() => ({}));
+    if (!r.ok || !res.ok) throw new Error(res.error || `Server responded ${r.status}`);
+    return res;
+  });
 }
 
 /* -------------------------------------------------------
@@ -780,6 +756,13 @@ function openProjectForm(existingProject) {
   if (isEdit) roleInput.value = existingProject.role || '';
   dateRow.appendChild(field('Role / Context', roleInput));
   form.appendChild(dateRow);
+
+  const priorityInput = document.createElement('input');
+  priorityInput.type = 'number';
+  priorityInput.min = '1';
+  priorityInput.placeholder = 'Leave blank for automatic (newest first)';
+  if (isEdit && Number.isFinite(existingProject.priority)) priorityInput.value = existingProject.priority;
+  form.appendChild(field('Priority (1 = shown first, pushes everything else down)', priorityInput));
 
   const summaryInput = document.createElement('textarea');
   summaryInput.placeholder = 'Short 1-2 sentence summary shown on project cards...';
@@ -959,10 +942,10 @@ function openProjectForm(existingProject) {
   copyBtn.className = 'copy-btn';
   copyBtn.textContent = 'Copy JSON';
 
-  const submitIssueBtn = document.createElement('button');
-  submitIssueBtn.type = 'button';
-  submitIssueBtn.className = 'gen-json-btn';
-  submitIssueBtn.textContent = isEdit ? 'Submit Update via GitHub Issue →' : 'Submit via GitHub Issue →';
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'gen-json-btn';
+  saveBtn.textContent = isEdit ? 'Save Changes' : 'Add Project';
 
   let lastGenerated = null;
 
@@ -983,6 +966,9 @@ function openProjectForm(existingProject) {
     };
     if (dateInput.value.trim()) obj.date = dateInput.value.trim();
     if (roleInput.value.trim()) obj.role = roleInput.value.trim();
+    if (priorityInput.value.trim() !== '' && Number.isFinite(Number(priorityInput.value))) {
+      obj.priority = Number(priorityInput.value);
+    }
     if (featuredChk.checked) obj.featured = true;
     if (summaryInput.value.trim()) obj.summary = summaryInput.value.trim();
     if (descriptionInput.value.trim()) obj.description = descriptionInput.value.trim();
@@ -1009,23 +995,43 @@ function openProjectForm(existingProject) {
     });
   });
 
-  submitIssueBtn.addEventListener('click', () => {
-    const obj = lastGenerated || buildProjectObject();
+  saveBtn.addEventListener('click', () => {
+    const obj = buildProjectObject();
+    const updated = rawProjects.slice();
+
     if (isEdit) {
-      openGithubIssue('[edit-project]', obj.title, { originalTitle: existingProject.title, project: obj });
+      const idx = updated.findIndex(p => p.title === existingProject.title);
+      if (idx === -1) {
+        note.textContent = `⚠️ Could not find a project titled "${existingProject.title}" to update.`;
+        return;
+      }
+      updated[idx] = obj;
     } else {
-      openGithubIssue('[new-project]', obj.title, obj);
+      updated.push(obj);
     }
+
+    saveBtn.disabled = true;
+    saveBtn.textContent = 'Saving...';
+    saveProjectsToDisk(updated)
+      .then(() => {
+        saveBtn.textContent = '✔ Saved!';
+        note.textContent = 'Saved to projects/projects.json. Reloading...';
+        setTimeout(() => location.reload(), 700);
+      })
+      .catch(err => {
+        saveBtn.disabled = false;
+        saveBtn.textContent = isEdit ? 'Save Changes' : 'Add Project';
+        note.textContent = `⚠️ Save failed: ${err.message}. Are you running the site with "python serve.py"? (Other servers like Live Server can't save files.)`;
+      });
   });
 
   actionRow.appendChild(copyBtn);
-  actionRow.appendChild(submitIssueBtn);
+  actionRow.appendChild(saveBtn);
+  actionRow.style.display = 'flex';
 
   const note = document.createElement('p');
   note.className = 'form-note';
-  note.textContent = isEdit
-    ? 'Submitting opens a pre-filled GitHub Issue in a new tab (you\'ll need to be logged into GitHub). A workflow in the repo applies the update and closes the issue automatically — usually live within a minute or two.'
-    : 'Submitting opens a pre-filled GitHub Issue in a new tab (you\'ll need to be logged into GitHub). A workflow in the repo adds it to projects.json and closes the issue automatically — usually live within a minute or two.';
+  note.textContent = 'Saves directly to projects/projects.json on your computer (requires the site to be running via "python serve.py"). Changes stay local until you commit and push to GitHub.';
 
   form.appendChild(genBtn);
   form.appendChild(jsonOutput);
