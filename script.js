@@ -17,11 +17,17 @@ fetch(`/projects/projects.json`)
     rawProjects = data;
     allProjects = data.map(normalizeProject);
 
-    const featured = sortByDateDesc(allProjects.filter(p => p.featured));
-    const topList = featured.length > 0 ? featured : sortByDateDesc(allProjects).slice(0, 3);
+    // Board-design projects get their own dedicated showcase section and are
+    // kept out of the top/gallery lists so they aren't shown twice.
+    const boards = sortByDateDesc(allProjects.filter(isBoard));
+    const mainProjects = allProjects.filter(p => !isBoard(p));
+
+    const featured = sortByDateDesc(mainProjects.filter(p => p.featured));
+    const topList = featured.length > 0 ? featured : sortByDateDesc(mainProjects).slice(0, 3);
 
     buildTopProjects(topList);
-    buildProjectIndex(allProjects);
+    buildBoardsShowcase(boards);
+    buildProjectIndex(mainProjects);
   })
   .catch(err => {
     console.error('Failed to load projects.json', err);
@@ -208,6 +214,179 @@ function buildInlineCardMedia(m, project) {
     default:
       return null;
   }
+}
+
+/* =========================================================
+   Board Designs — dedicated PCB showcase
+   -----------------------------------------------------------
+   A row of expanding panels. Exactly one board is "open" at a
+   time: it grows to reveal the interactive 3D model + details,
+   while the other boards collapse to a slim tile showing just
+   a one-line hook. Clicking a collapsed tile smoothly swaps
+   which board is open. Only the open board mounts its (heavy)
+   3D iframe, so nothing loads until you ask for it.
+========================================================= */
+function isBoard(p) {
+  if (p.category === 'board') return true;
+  // Fallback: treat anything whose primary media is a PCB embed as a board,
+  // so older entries work even without the explicit category tag.
+  return Array.isArray(p.media) && p.media.some(m => m && m.type === 'pcb-iframe');
+}
+
+function buildBoardsShowcase(boards) {
+  const container = document.getElementById('boards-showcase');
+  if (!container) return;
+
+  const section = container.closest('section');
+  if (!boards || boards.length === 0) {
+    if (section) section.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = '';
+  container.classList.add('boards-showcase');
+
+  let activeIndex = 0;
+  const panels = boards.map((board, i) => buildBoardPanel(board, i));
+
+  function setActive(i) {
+    if (i === activeIndex) return;
+    panels[activeIndex].collapse();
+    activeIndex = i;
+    panels[activeIndex].expand();
+  }
+
+  panels.forEach((panel, i) => {
+    panel.el.addEventListener('click', () => setActive(i));
+    panel.spine.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActive(i); }
+    });
+    container.appendChild(panel.el);
+  });
+
+  panels[0].expand(); // open the first board (mounts its viewer)
+}
+
+function buildBoardPanel(board, index) {
+  const el = document.createElement('article');
+  el.className = 'board-panel';
+  el.dataset.index = index;
+
+  const num = String(index + 1).padStart(2, '0');
+
+  /* ---- Spine: always visible (the collapsed teaser face) ---- */
+  const spine = document.createElement('div');
+  spine.className = 'board-spine';
+  spine.tabIndex = 0;
+  spine.setAttribute('role', 'button');
+  spine.setAttribute('aria-label', `Open ${board.title}`);
+
+  const spineNum = document.createElement('span');
+  spineNum.className = 'board-num';
+  spineNum.textContent = num;
+  spine.appendChild(spineNum);
+
+  const spineTitle = document.createElement('h3');
+  spineTitle.className = 'board-spine-title';
+  spineTitle.textContent = boardShortTitle(board.title);
+  spine.appendChild(spineTitle);
+
+  const hook = document.createElement('p');
+  hook.className = 'board-hook';
+  hook.textContent = board.hook || board.summary || '';
+  spine.appendChild(hook);
+
+  const cue = document.createElement('span');
+  cue.className = 'board-cue';
+  cue.textContent = 'Open 3D model →';
+  spine.appendChild(cue);
+
+  el.appendChild(spine);
+
+  /* ---- Content: revealed only when this panel is open ---- */
+  const content = document.createElement('div');
+  content.className = 'board-content';
+
+  const meta = document.createElement('div');
+  meta.className = 'board-meta';
+
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'board-eyebrow';
+  const idxTag = document.createElement('span');
+  idxTag.className = 'board-num';
+  idxTag.textContent = num;
+  eyebrow.appendChild(idxTag);
+  if (board.date) {
+    const d = document.createElement('span');
+    d.className = 'tile-date';
+    d.textContent = board.date;
+    eyebrow.appendChild(d);
+  }
+  meta.appendChild(eyebrow);
+
+  const title = document.createElement('h3');
+  title.className = 'board-title';
+  title.textContent = board.title;
+  meta.appendChild(title);
+
+  if (board.role) {
+    const role = document.createElement('div');
+    role.className = 'tile-role';
+    role.textContent = board.role;
+    meta.appendChild(role);
+  }
+
+  if (board.summary) {
+    const sum = document.createElement('p');
+    sum.className = 'board-summary';
+    sum.textContent = board.summary;
+    meta.appendChild(sum);
+  }
+
+  meta.appendChild(buildToolsRow(board.tools));
+
+  const detailsBtn = document.createElement('button');
+  detailsBtn.type = 'button';
+  detailsBtn.className = 'board-details-btn';
+  detailsBtn.textContent = 'Full write-up →';
+  detailsBtn.addEventListener('click', e => { e.stopPropagation(); openProjectModal(board); });
+  meta.appendChild(detailsBtn);
+
+  const media = document.createElement('div');
+  media.className = 'board-viewer';
+  const firstMedia = board.media && board.media[0];
+
+  content.appendChild(media);
+  content.appendChild(meta);
+  el.appendChild(content);
+
+  attachEditBubble(el, board);
+
+  let mounted = false;
+  function mountMedia() {
+    if (mounted || !firstMedia) return;
+    mounted = true;
+    const el2 = buildInlineCardMedia(firstMedia, board);
+    if (el2) media.appendChild(el2);
+    if (firstMedia.caption) {
+      const cap = document.createElement('div');
+      cap.className = 'board-caption';
+      cap.textContent = firstMedia.caption;
+      media.appendChild(cap);
+    }
+  }
+
+  return {
+    el,
+    spine,
+    expand() { el.classList.add('active'); mountMedia(); },
+    collapse() { el.classList.remove('active'); },
+  };
+}
+
+// Strip the shared "— LHR Solar Car"-style suffix for the compact spine label.
+function boardShortTitle(title) {
+  return String(title).split(/\s+[—–-]\s+/)[0].trim();
 }
 
 /* =========================================================
@@ -794,6 +973,25 @@ function openProjectForm(existingProject) {
   if (isEdit) featuredChk.checked = !!existingProject.featured;
   form.appendChild(field('Feature this project at the top', featuredChk, true));
 
+  // Category — "board" routes a project into the dedicated Board Designs
+  // showcase instead of the normal top/gallery lists.
+  const categorySelect = document.createElement('select');
+  ['', 'board'].forEach(val => {
+    const o = document.createElement('option');
+    o.value = val;
+    o.textContent = val === 'board' ? 'Board design (PCB showcase)' : 'General project';
+    categorySelect.appendChild(o);
+  });
+  if (isEdit && existingProject.category) categorySelect.value = existingProject.category;
+  form.appendChild(field('Section', categorySelect));
+
+  // Hook — short one-liner shown on the collapsed board tile.
+  const hookInput = document.createElement('input');
+  hookInput.type = 'text';
+  hookInput.placeholder = 'One punchy line shown on the collapsed board tile...';
+  if (isEdit) hookInput.value = existingProject.hook || '';
+  form.appendChild(field('Board hook (board designs only)', hookInput));
+
   // Curated icon-backed tools
   const existingTools = (isEdit && existingProject.tools) || [];
   const toolsGroup = document.createElement('div');
@@ -970,6 +1168,8 @@ function openProjectForm(existingProject) {
       obj.priority = Number(priorityInput.value);
     }
     if (featuredChk.checked) obj.featured = true;
+    if (categorySelect.value) obj.category = categorySelect.value;
+    if (hookInput.value.trim()) obj.hook = hookInput.value.trim();
     if (summaryInput.value.trim()) obj.summary = summaryInput.value.trim();
     if (descriptionInput.value.trim()) obj.description = descriptionInput.value.trim();
     if (linkInput.value.trim()) obj.link = linkInput.value.trim();

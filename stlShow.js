@@ -30,7 +30,7 @@ export function showSTL(containerId, stlPath) {
 
   const indicator = document.createElement('div');
   indicator.className = 'drag-indicator';
-  indicator.textContent = '👆 Drag to rotate';
+  indicator.textContent = 'Drag to rotate';
   container.appendChild(indicator);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
