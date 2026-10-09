@@ -10,9 +10,36 @@
     "summary": "Custom STM32L4-based PCB serving as the solar car's central hub for all driver-dashboard and steering wheel inputs — 15+ functions buffered and transmitted over 3 CAN bus lines at 500 kbps via thread-safe FreeRTOS firmware.",
     "description": "Designed a custom PCB that acts as the central hub for human-machine interface inputs on UT Austin's Longhorn Racing solar car. The board interfaces 15+ driver-dashboard functions and GPIO inputs — ignition, gear selection, cruise control, regen, hazards, turn indicators, and horn — with an STM32L4 MCU, transmitting all buffered signals across 3 CAN bus lines at 500 kbps to every peripheral board through a thread-safe FreeRTOS code structure. Built a protected 24V→5V→3.3V power system with buck/LDO stages, reverse-polarity protection, and consistent noise filtering for reliable operation in any environment, plus isolated power and ground dedicated to the dual CAN transceiver interfaces. Developed MOSFET-based input protection and op-amp buffer circuits to isolate sensors from the MCU GPIOs, minimizing current draw and ensuring clean, debounced signal acquisition. Collaborated with mechanical teams to meet packaging requirements, iterating through RevA/RevB hardware revision cycles with schematic reviews and design rule checks, while co-developing low-level C firmware for real-time signal handling.",
     "link": "",
-    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "FreeRTOS", "CAN Bus", "Oscilloscope"],
+    "tools": [
+      "KiCad.svg",
+      "STM32.svg",
+      "CPlusPlus.svg",
+      "PCBDesign.svg",
+      "Soldering.svg",
+      "Git.svg",
+      "FreeRTOS",
+      "CAN Bus",
+      "Oscilloscope"
+    ],
     "media": [
-      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028114247c4e0b325beba?mode=embed", "caption": "Controls Leader PCB — interactive 3D view (drag to rotate)" }
+      {
+        "type": "pcb-iframe",
+        "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028114247c4e0b325beba?mode=embed",
+        "caption": "Controls Leader PCB — interactive 3D view (drag to rotate)"
+      }
+    ],
+    "highlights": [
+      "STM32L4 hub for 15+ driver and steering-wheel inputs",
+      "Buffered over 3 CAN lines at 500 kbps",
+      "Protected 24V→5V→3.3V power with isolated CAN supply"
+    ],
+    "details": [
+      "Central hub for the solar car's human-machine interface: ignition, gear select, cruise, regen, hazards, turn indicators and horn",
+      "STM32L4 with thread-safe FreeRTOS firmware, transmitting buffered signals over 3 CAN buses at 500 kbps",
+      "Protected 24V→5V→3.3V power with buck/LDO stages, reverse-polarity protection and noise filtering",
+      "Isolated power and ground dedicated to the dual CAN transceivers",
+      "MOSFET input protection and op-amp buffers keep sensors off the MCU GPIOs for clean, debounced signals",
+      "Worked with the mechanical team on packaging across RevA/RevB, with schematic reviews and DRC; co-developed the low-level C firmware"
     ]
   },
   {
@@ -26,9 +53,35 @@
     "summary": "Custom STM32G4-based PCB reading brake & accelerator pedal inputs and brake-line pressure — buffered analog signals, redundant sensing paths, and processed data transmitted over CAN.",
     "description": "Designed a custom PCB that interfaces the solar car's brake and accelerator pedal inputs and measures brake-line pressure, buffering the analog signals before feeding them into an STM32G4's ADC inputs and transmitting the processed data over CAN. The board is a pedal daughter board that mates with the Peripheral Sensing/Output Module (PSOM) to sense linear potentiometers and the brake-line pressure sensor. Integrated UART debugging for thorough system testing of each ADC input and its data processing in real time, enabling both hardware- and software-level signal verification. Leveraged redundant sensing paths and signal shielding to improve data integrity and reduce the impact of noise and EMI on safety-critical control signals.",
     "link": "",
-    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "CAN Bus", "UART", "Oscilloscope"],
+    "tools": [
+      "KiCad.svg",
+      "STM32.svg",
+      "CPlusPlus.svg",
+      "PCBDesign.svg",
+      "Soldering.svg",
+      "Git.svg",
+      "CAN Bus",
+      "UART",
+      "Oscilloscope"
+    ],
     "media": [
-      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b602811ba5cb79e55acdcd2?mode=embed", "caption": "Pedals Board PCB — interactive 3D view (drag to rotate)" }
+      {
+        "type": "pcb-iframe",
+        "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b602811ba5cb79e55acdcd2?mode=embed",
+        "caption": "Pedals Board PCB — interactive 3D view (drag to rotate)"
+      }
+    ],
+    "highlights": [
+      "STM32G4 board for brake and accelerator pedals plus brake-line pressure",
+      "Buffered analog inputs with redundant sensing paths",
+      "Processed data sent over CAN, UART debug built in"
+    ],
+    "details": [
+      "Pedal daughter board that mates with the Peripheral Sensing/Output Module (PSOM)",
+      "Senses linear potentiometers and the brake-line pressure sensor",
+      "Analog signals are buffered before the STM32G4's ADC inputs; processed data goes out over CAN",
+      "UART debugging to verify each ADC input and its processing in real time",
+      "Redundant sensing paths and signal shielding reduce noise and EMI on safety-critical signals"
     ]
   },
   {
@@ -42,9 +95,39 @@
     "summary": "Motor-control VCU for UT's 2026-27 solar car. A fully galvanically isolated CAN and signal interface fixed EMI and noise coupling into the motor controller, and a 100+ state FreeRTOS state machine runs BPS, motor-fault, and regen/cruise logic.",
     "description": "Designed the Vehicle Control Unit (VCU) for motor control on UT Austin's 2026-27 Longhorn Racing Solar car, as part of the Vehicle Controls & Telemetry (VCAT) system I lead. The motor controller was suffering from EMI and noise coupling, so the board is built around a fully galvanically isolated CAN and signal interface: an isolated motor CAN bus, an isolated SPI DAC that generates the accelerator and brake reference voltages, isolated digital mode and map signals, and a dedicated isolated supply for the motor side. MOSFET level shifting translates the map-bit, forward/reverse, and power/eco mode signals, and the motor's RPM pulse output is stepped down for the microcontroller. The vehicle side has a protected 12V input with a fuse and a buck regulator, a power mux that switches between the buck supply and USB power, and a 3.3V rail. Two CAN buses (car and motor) have transient protection and jumper-selectable bus termination, and the board also carries a microSD card, I2C dual-fan control with tach feedback, a thermistor input, fault and status LEDs, a USB-C port, and CAN debug headers and test points. On the software side, I wrote the STM32 FreeRTOS firmware as a 100+ state finite state machine with O(1) dispatch that runs BPS, motor-fault, and regen/cruise logic.",
     "link": "",
-    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "FreeRTOS", "CAN Bus", "SPI", "I2C"],
+    "tools": [
+      "KiCad.svg",
+      "STM32.svg",
+      "CPlusPlus.svg",
+      "PCBDesign.svg",
+      "Soldering.svg",
+      "Git.svg",
+      "FreeRTOS",
+      "CAN Bus",
+      "SPI",
+      "I2C"
+    ],
     "media": [
-      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028116f188bd40ed40e37?mode=embed", "caption": "VCU PCB — interactive 3D view (drag to rotate)" }
+      {
+        "type": "pcb-iframe",
+        "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028116f188bd40ed40e37?mode=embed",
+        "caption": "VCU PCB — interactive 3D view (drag to rotate)"
+      }
+    ],
+    "highlights": [
+      "Fully isolated CAN and signal interface to fix motor-controller EMI",
+      "Isolated SPI DAC sets accelerator and brake reference",
+      "100+ state FreeRTOS state machine for BPS, faults and regen/cruise"
+    ],
+    "details": [
+      "Vehicle Control Unit for motor control on UT Austin's 2026-27 Longhorn Racing solar car, part of the VCAT system I lead",
+      "Built around a fully galvanically isolated CAN and signal interface to stop EMI and noise coupling into the motor controller",
+      "Isolated motor CAN bus, isolated SPI DAC for accelerator and brake reference voltages, and a dedicated isolated motor-side supply",
+      "MOSFET level shifting for map, forward/reverse and power/eco mode signals; motor RPM pulse stepped down for the MCU",
+      "Protected 12V input with fuse and buck regulator, a buck/USB power mux and a 3.3V rail",
+      "Two CAN buses with transient protection and jumper-selectable termination",
+      "Also carries microSD, I2C dual-fan control with tach feedback, thermistor input, status LEDs, USB-C and debug headers",
+      "STM32 FreeRTOS firmware written as a 100+ state finite state machine with O(1) dispatch for BPS, motor-fault and regen/cruise logic"
     ]
   },
   {
@@ -55,9 +138,30 @@
     "summary": "Simulated a custom robot in ROS2 and Gazebo with sensor integration, control, and navigation — intermediate proficiency reached in under 3 weeks.",
     "description": "Designed and simulated a custom robot in ROS2 and Gazebo, utilizing the publish-subscribe model for sensor integration, control, and navigation. I pursued this project after my senior year (graduated high school) as a continuation of my ISM dog robot project seen in the project tile below. I wanted to run simulations of my dog robot with an industry-certified tool like ROS2. In just under 3 weeks I accomplished an intermediate level of proficiency in the ROS2 framework, and its methods of communication with simulators like RViz and Gazebo through Udemy certifications. Future Plans: During my freshman year as an ECE Honors major at UT Austin, I plan to implement the 3D .stl model of my robot design into Gazebo and start programming its limbs and test its movement virtually before running the ROS2 framework on the real bot.",
     "link": "",
-    "tools": ["Python.svg", "ROS.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
+    "tools": [
+      "Python.svg",
+      "ROS.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "PCBDesign.svg"
+    ],
     "media": [
-      { "type": "video-local", "src": "/assets/videos/GazeboSimVideo.mp4", "caption": "Gazebo simulation demo" }
+      {
+        "type": "video-local",
+        "src": "/assets/videos/GazeboSimVideo.mp4",
+        "caption": "Gazebo simulation demo"
+      }
+    ],
+    "highlights": [
+      "Custom robot simulated in ROS2 and Gazebo",
+      "Sensor integration, control and navigation",
+      "Intermediate ROS2 proficiency in under 3 weeks"
+    ],
+    "details": [
+      "Designed and simulated a custom robot using the ROS2 publish-subscribe model",
+      "Continuation of my ISM dog robot, to simulate it in an industry tool",
+      "Reached intermediate ROS2 proficiency in under 3 weeks through Udemy certifications, including RViz and Gazebo",
+      "Next: import the 3D .stl model into Gazebo and test limb movement virtually before running on the real bot"
     ]
   },
   {
@@ -69,9 +173,31 @@
     "description": "Prototyped three bio-inspired robots to explore optimal locomotion and energy efficiency. Led a year-long ISM research initiative focused on robotics for hazardous environments like space and underwater missions. Designed soft robotic systems inspired by octopus suction and spider-like movement, engineered custom PCBs, programmed embedded systems in Python and C++, and simulated performance using ROS. CAD models were created in Fusion 360 and fabricated with an Ender 3 printer, and finally presented at the ISM End-of-Year Showcase with the entire school district.",
     "link": "https://sathvikyechuri.wixsite.com/ismportfolio",
     "linkLabel": "View ISM Portfolio",
-    "tools": ["Python.svg", "CPlusPlus.svg", "Fusion360.svg", "3DPrinting.svg", "PCBDesign.svg"],
+    "tools": [
+      "Python.svg",
+      "CPlusPlus.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "PCBDesign.svg"
+    ],
     "media": [
-      { "type": "stl", "src": "/assets/models/test_ism_robot.stl", "caption": "ISM robot - drag to rotate" }
+      {
+        "type": "stl",
+        "src": "/assets/models/test_ism_robot.stl",
+        "caption": "ISM robot - drag to rotate"
+      }
+    ],
+    "highlights": [
+      "Prototyped three bio-inspired robots for hazardous environments",
+      "Soft robotics, custom PCBs, Python/C++ and ROS",
+      "Fusion 360 CAD, 3D-printed, shown at the ISM showcase"
+    ],
+    "details": [
+      "Led a year-long ISM research initiative on robotics for hazardous environments like space and underwater missions",
+      "Soft robotic systems inspired by octopus suction and spider-like movement",
+      "Custom PCBs, embedded Python and C++, performance simulated in ROS",
+      "CAD in Fusion 360, printed on an Ender 3",
+      "Presented at the ISM End-of-Year Showcase to the entire school district"
     ]
   },
   {
@@ -82,9 +208,30 @@
     "summary": "Led a 30+ member robotics team through full-cycle robot development, autonomous navigation, and over $20K in sponsorships.",
     "description": "Led a 30+ member robotics team through full-cycle robot development for FIRST Robotics Competition, oversaw and thoroughly led CAD prototyping in Fusion 360 for two straight seasons, autonomous navigation using AprilTags on Jetson Nano, and pneumatics-based climbing mechanisms. Programmed pathfinding modules, optimized shooter kinematics, and engineered button-board layouts. Managed team logistics, secured $20K+ in sponsorships, and mentored FRC/FLL teams.",
     "link": "",
-    "tools": ["Fusion360.svg", "Python.svg", "CPlusPlus.svg", "JetsonNano.svg"],
+    "tools": [
+      "Fusion360.svg",
+      "Python.svg",
+      "CPlusPlus.svg",
+      "JetsonNano.svg"
+    ],
     "media": [
-      { "type": "video-youtube", "src": "https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe", "caption": "Season highlight reel" }
+      {
+        "type": "video-youtube",
+        "src": "https://www.youtube.com/embed/AxENzEoPl3U?si=PYUo-Hv2jhXSZREe",
+        "caption": "Season highlight reel"
+      }
+    ],
+    "highlights": [
+      "Led a 30+ member FIRST Robotics team",
+      "AprilTag navigation on Jetson Nano, pneumatic climber",
+      "Secured $20K+ in sponsorships"
+    ],
+    "details": [
+      "Led a 30+ member team through full-cycle robot development for FIRST Robotics Competition",
+      "Directed Fusion 360 CAD prototyping for two straight seasons",
+      "AprilTag autonomous navigation on Jetson Nano and pneumatic climbing mechanisms",
+      "Programmed pathfinding, optimized shooter kinematics and designed button-board layouts",
+      "Managed logistics, secured $20K+ in sponsorships and mentored FRC/FLL teams"
     ]
   },
   {
@@ -94,9 +241,22 @@
     "summary": "Developed a Swift-based mobile app to alert school security systems during life-threatening scenarios, integrating Firebase and Twilio APIs.",
     "description": "Designed and built Alertify, a mobile app for emergency alerts in school environments. Conducted user research, built frontend in Swift/Xcode, and implemented backend with Firebase and Twilio APIs for real-time messaging. Recognized by Congressman Pat Fallon for innovation in public safety.",
     "link": "",
-    "tools": ["Xcode.svg", "Firebase.svg", "Swift.svg"],
+    "tools": [
+      "Xcode.svg",
+      "Firebase.svg",
+      "Swift.svg"
+    ],
     "media": [
-      { "type": "video-youtube", "src": "https://www.youtube.com/embed/dZ90oKxldtE?si=Go2QnGKW_Lx8jiVP", "caption": "App demo" }
+      {
+        "type": "video-youtube",
+        "src": "https://www.youtube.com/embed/dZ90oKxldtE?si=Go2QnGKW_Lx8jiVP",
+        "caption": "App demo"
+      }
+    ],
+    "highlights": [
+      "Swift app that alerts school security in emergencies",
+      "Firebase backend with Twilio messaging",
+      "Recognized by Congressman Pat Fallon"
     ]
   },
   {
@@ -106,8 +266,18 @@
     "summary": "Built a CNN-based emotion detection model using OpenCV to support children with autism, as part of Inspirit AI research.",
     "description": "Collaborated on an emotion detection model using CNNs and OpenCV to help children with autism. Explored reinforcement learning for robotic control tasks like pendulum balancing. Mentored by researchers from Brown and Harvard, and earned DeepLearning.AI certification.",
     "link": "",
-    "tools": ["Python.svg", "OpenCV.svg", "TensorFlow.svg", "Keras.svg"],
-    "media": []
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "TensorFlow.svg",
+      "Keras.svg"
+    ],
+    "media": [],
+    "highlights": [
+      "CNN emotion detection with OpenCV for children with autism",
+      "Inspirit AI research, mentored by Brown and Harvard researchers",
+      "Also explored reinforcement learning for robot control"
+    ]
   },
   {
     "title": "DIY Hand Crank Generator",
@@ -116,8 +286,16 @@
     "summary": "After learning about electromagnetic induction from Physics 2, tested the theory with a hand crank generator built from 3D-printed gears and coils, generating 1V of potential difference.",
     "description": "After learning about electromagnetic induction from my Physics 2 class, I went on to test the theory with my own hand crank generator. I modeled and 3D-printed two beveled gears, with the big gear having six magnets attached while three coils were stationary and in series to induce current. I was able to generate 1 V of potential difference.",
     "link": "",
-    "tools": ["Fusion360.svg", "3DPrinting.svg"],
-    "media": []
+    "tools": [
+      "Fusion360.svg",
+      "3DPrinting.svg"
+    ],
+    "media": [],
+    "highlights": [
+      "Hand crank generator with 3D-printed beveled gears",
+      "Six rotor magnets and three coils in series",
+      "Generated 1 V of potential difference"
+    ]
   },
   {
     "title": "DIY Air Quality Monitoring System",
@@ -126,8 +304,19 @@
     "summary": "Engineered a low-cost air and water quality monitoring system using Raspberry Pi and custom sensors, logging real-time data for analysis.",
     "description": "Built a Raspberry Pi-based system to monitor air and water quality using PM2.5/PM10 sensors and a DIY turbidity sensor. Displayed data on an LCD and logged to CSV files. Simulated unhealthy conditions to test accuracy. Earned second place and a $250 award.",
     "link": "",
-    "tools": ["Python.svg", "CSV.svg", "Fusion360.svg", "3DPrinting.svg", "RaspberryPi.svg"],
-    "media": []
+    "tools": [
+      "Python.svg",
+      "CSV.svg",
+      "Fusion360.svg",
+      "3DPrinting.svg",
+      "RaspberryPi.svg"
+    ],
+    "media": [],
+    "highlights": [
+      "Raspberry Pi air and water quality monitor",
+      "PM2.5/PM10 sensors plus a DIY turbidity sensor",
+      "Logged to CSV, won 2nd place and $250"
+    ]
   },
   {
     "title": "Active Speaker Detection Research @ UTD",
@@ -136,8 +325,17 @@
     "summary": "Researched and developed models for detecting active speakers in multimodal scenarios using computer vision and audio analysis.",
     "description": "Interned at UT Dallas CVMC Lab under Prof. Yapeng Tian. Led research on Active Speaker Detection using computer vision and audio streams. Developed Deep Q-learning models and presented findings to faculty. Drafting manuscript for Journal of Student Research.",
     "link": "",
-    "tools": ["Python.svg", "OpenCV.svg", "TensorFlow.svg"],
-    "media": []
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "TensorFlow.svg"
+    ],
+    "media": [],
+    "highlights": [
+      "Active speaker detection from video and audio",
+      "Deep Q-learning models, UT Dallas CVMC Lab",
+      "Manuscript in progress for the Journal of Student Research"
+    ]
   },
   {
     "title": "AI Facial Emotion based Therapy Bot",
@@ -146,7 +344,16 @@
     "summary": "Built a mental health chatbot using facial emotion recognition and OpenAI LLMs, placing 4th out of 107 submissions.",
     "description": "Developed a therapy chatbot that uses YOLO and OpenCV for live emotion detection and OpenAI LLMs for generating therapist-like responses. Placed 4th out of 107 entries at UTD's AI For All Hackathon in 2023.",
     "link": "",
-    "tools": ["Python.svg", "OpenCV.svg", "OpenAI.svg"],
-    "media": []
+    "tools": [
+      "Python.svg",
+      "OpenCV.svg",
+      "OpenAI.svg"
+    ],
+    "media": [],
+    "highlights": [
+      "Therapy chatbot driven by live facial emotion detection",
+      "YOLO and OpenCV paired with OpenAI LLMs",
+      "4th of 107 entries at UTD's AI For All Hackathon"
+    ]
   }
 ]

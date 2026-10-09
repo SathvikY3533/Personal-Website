@@ -77,6 +77,13 @@ function normalizeProject(p) {
   return { ...p, media };
 }
 
+function buildBullets(items, cls) {
+  const ul = document.createElement('ul');
+  ul.className = cls;
+  items.forEach(t => { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+  return ul;
+}
+
 /* -------------------------------------------------------
    Tool pill rendering
 ------------------------------------------------------- */
@@ -165,7 +172,9 @@ function buildTopCard(p, isFirst) {
     cardContent.appendChild(role);
   }
 
-  if (p.summary) {
+  if (Array.isArray(p.highlights) && p.highlights.length) {
+    cardContent.appendChild(buildBullets(p.highlights, 'tile-bullets'));
+  } else if (p.summary) {
     const summary = document.createElement('p');
     summary.className = 'tile-desc';
     summary.textContent = p.summary;
@@ -512,10 +521,14 @@ function buildIndexGrid(sorted) {
       card.appendChild(role);
     }
 
-    const summary = document.createElement('div');
-    summary.className = 'tile-desc';
-    summary.textContent = p.summary || '';
-    card.appendChild(summary);
+    if (Array.isArray(p.highlights) && p.highlights.length) {
+      card.appendChild(buildBullets(p.highlights, 'tile-bullets'));
+    } else {
+      const summary = document.createElement('div');
+      summary.className = 'tile-desc';
+      summary.textContent = p.summary || '';
+      card.appendChild(summary);
+    }
 
     card.appendChild(buildToolsRow(p.tools));
 
@@ -627,7 +640,9 @@ function openProjectModal(project) {
     body.appendChild(buildMediaGallery(project.media, project));
   }
 
-  if (project.description) {
+  if (Array.isArray(project.details) && project.details.length) {
+    body.appendChild(buildBullets(project.details, 'modal-bullets'));
+  } else if (project.description) {
     const desc = document.createElement('p');
     desc.className = 'modal-description';
     desc.textContent = project.description;
