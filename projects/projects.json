@@ -32,6 +32,22 @@
     ]
   },
   {
+    "title": "VCU PCB — LHR Solar Car",
+    "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
+    "date": "Fall 2025 - Present",
+    "featured": true,
+    "priority": 3,
+    "category": "board",
+    "hook": "The solar car's Vehicle Control Unit — a custom board built for Longhorn Racing Solar.",
+    "summary": "Custom Vehicle Control Unit (VCU) PCB designed for UT Austin's Longhorn Racing Solar car as part of the VCAT controls and telemetry system.",
+    "description": "Designed a custom Vehicle Control Unit (VCU) PCB for UT Austin's Longhorn Racing Solar car as part of the Vehicle Controls & Telemetry (VCAT) team, working alongside the Controls Leader and Pedals boards. Explore the interactive 3D model of the board below.",
+    "link": "",
+    "tools": ["KiCad.svg", "STM32.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "CAN Bus"],
+    "media": [
+      { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028116f188bd40ed40e37?mode=embed", "caption": "VCU PCB — interactive 3D view (drag to rotate)" }
+    ]
+  },
+  {
     "title": "ROS2 & Gazebo Robotics Simulation",
     "role": "Personal Passion Project",
     "date": "Summer 2025",
