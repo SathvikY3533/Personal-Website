@@ -2,9 +2,9 @@
   {
     "title": "Controls Leader PCB — LHR Solar Car",
     "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
-    "date": "Fall 2025 - Present",
+    "date": "Fall 2025 - Spring 2026",
     "featured": true,
-    "priority": 1,
+    "priority": 2,
     "category": "board",
     "hook": "The solar car's central nervous system — 15+ driver inputs buffered onto 3 CAN buses by a custom STM32L4 board.",
     "summary": "Custom STM32L4-based PCB serving as the solar car's central hub for all driver-dashboard and steering wheel inputs — 15+ functions buffered and transmitted over 3 CAN bus lines at 500 kbps via thread-safe FreeRTOS firmware.",
@@ -18,9 +18,9 @@
   {
     "title": "Pedals Board PCB — LHR Solar Car",
     "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
-    "date": "Fall 2025 - Present",
+    "date": "Fall 2025 - Spring 2026",
     "featured": true,
-    "priority": 2,
+    "priority": 3,
     "category": "board",
     "hook": "Turns pedal presses into data — redundant analog brake & throttle sensing feeding an STM32G4 over CAN.",
     "summary": "Custom STM32G4-based PCB reading brake & accelerator pedal inputs and brake-line pressure — buffered analog signals, redundant sensing paths, and processed data transmitted over CAN.",
@@ -33,16 +33,16 @@
   },
   {
     "title": "VCU PCB — LHR Solar Car",
-    "role": "Vehicle Controls & Telemetry (VCAT) Engineer, Longhorn Racing Solar",
-    "date": "Fall 2025 - Present",
+    "role": "Vehicle Controls & Telemetry (VCAT) System Lead, Longhorn Racing Solar",
+    "date": "Fall 2026 - Present",
     "featured": true,
-    "priority": 3,
+    "priority": 1,
     "category": "board",
-    "hook": "The solar car's Vehicle Control Unit — a custom board built for Longhorn Racing Solar.",
-    "summary": "Custom Vehicle Control Unit (VCU) PCB designed for UT Austin's Longhorn Racing Solar car as part of the VCAT controls and telemetry system.",
-    "description": "Designed a custom Vehicle Control Unit (VCU) PCB for UT Austin's Longhorn Racing Solar car as part of the Vehicle Controls & Telemetry (VCAT) team, working alongside the Controls Leader and Pedals boards. Explore the interactive 3D model of the board below.",
+    "hook": "The solar car's motor-control brain — a fully galvanically isolated CAN and signal interface that fixed the motor controller's EMI noise.",
+    "summary": "Motor-control VCU for UT's 2026-27 solar car. A fully galvanically isolated CAN and signal interface fixed EMI and noise coupling into the motor controller, and a 100+ state FreeRTOS state machine runs BPS, motor-fault, and regen/cruise logic.",
+    "description": "Designed the Vehicle Control Unit (VCU) for motor control on UT Austin's 2026-27 Longhorn Racing Solar car, as part of the Vehicle Controls & Telemetry (VCAT) system I lead. The motor controller was suffering from EMI and noise coupling, so the board is built around a fully galvanically isolated CAN and signal interface: an isolated motor CAN bus, an isolated SPI DAC that generates the accelerator and brake reference voltages, isolated digital mode and map signals, and a dedicated isolated supply for the motor side. MOSFET level shifting translates the map-bit, forward/reverse, and power/eco mode signals, and the motor's RPM pulse output is stepped down for the microcontroller. The vehicle side has a protected 12V input with a fuse and a buck regulator, a power mux that switches between the buck supply and USB power, and a 3.3V rail. Two CAN buses (car and motor) have transient protection and jumper-selectable bus termination, and the board also carries a microSD card, I2C dual-fan control with tach feedback, a thermistor input, fault and status LEDs, a USB-C port, and CAN debug headers and test points. On the software side, I wrote the STM32 FreeRTOS firmware as a 100+ state finite state machine with O(1) dispatch that runs BPS, motor-fault, and regen/cruise logic.",
     "link": "",
-    "tools": ["KiCad.svg", "STM32.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "CAN Bus"],
+    "tools": ["KiCad.svg", "STM32.svg", "CPlusPlus.svg", "PCBDesign.svg", "Soldering.svg", "Git.svg", "FreeRTOS", "CAN Bus", "SPI", "I2C"],
     "media": [
       { "type": "pcb-iframe", "src": "https://gmail6643653.autodesk360.com/shares/public/SH90d2dQT28d5b6028116f188bd40ed40e37?mode=embed", "caption": "VCU PCB — interactive 3D view (drag to rotate)" }
     ]

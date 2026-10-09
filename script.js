@@ -5,6 +5,25 @@ document.getElementById('mode-btn').addEventListener('click', () => {
   document.body.classList.toggle('dark');
 });
 
+/* Black skill logos get a white variant in dark mode (assets/images/tools/dark/).
+   Logos are re-pointed whenever the color mode changes. */
+const DARK_TOOL_LOGOS = new Set([
+  'KiCad', 'STM32', 'Git', 'JetsonNano', 'RaspberryPi',
+  'PCBDesign', 'OpenAI', 'CSV', 'Soldering', '3DPrinting', 'ROS'
+]);
+function toolLogoSrc(name, dark) {
+  return dark && DARK_TOOL_LOGOS.has(name)
+    ? `/assets/images/tools/dark/${name}.svg`
+    : `/assets/images/tools/${name}.svg`;
+}
+function syncToolLogos() {
+  const dark = document.body.classList.contains('dark');
+  document.querySelectorAll('img.tool-logo').forEach(img => {
+    img.src = toolLogoSrc(img.dataset.tool, dark);
+  });
+}
+new MutationObserver(syncToolLogos).observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
 /* =========================================================
    Load Projects
 ========================================================= */
@@ -17,17 +36,19 @@ fetch(`/projects/projects.json`)
     rawProjects = data;
     allProjects = data.map(normalizeProject);
 
-    // Board-design projects get their own dedicated showcase section and are
-    // kept out of the top/gallery lists so they aren't shown twice.
+    // My Favs: featured board designs lead, then the other featured projects.
+    // Everything else goes in the Projects Gallery.
     const boards = sortByDateDesc(allProjects.filter(isBoard));
     const mainProjects = allProjects.filter(p => !isBoard(p));
 
-    const featured = sortByDateDesc(mainProjects.filter(p => p.featured));
-    const topList = featured.length > 0 ? featured : sortByDateDesc(mainProjects).slice(0, 3);
+    const featuredBoards = boards.filter(p => p.featured);
+    const featuredMain = sortByDateDesc(mainProjects.filter(p => p.featured));
+    const favs = [...featuredBoards, ...featuredMain];
+    const topList = favs.length > 0 ? favs : sortByDateDesc(mainProjects).slice(0, 3);
+    const galleryList = allProjects.filter(p => !topList.includes(p));
 
     buildTopProjects(topList);
-    buildBoardsShowcase(boards);
-    buildProjectIndex(mainProjects);
+    buildProjectIndex(galleryList);
   })
   .catch(err => {
     console.error('Failed to load projects.json', err);
@@ -64,12 +85,15 @@ function buildToolPill(tool) {
   pill.className = 'tool-pill';
 
   if (tool.endsWith('.svg')) {
+    const name = tool.replace('.svg', '');
     const img = document.createElement('img');
-    img.src = `/assets/images/tools/${tool}`;
-    img.alt = tool.replace('.svg', '');
+    img.className = 'tool-logo';
+    img.dataset.tool = name;
+    img.src = toolLogoSrc(name, document.body.classList.contains('dark'));
+    img.alt = name;
+    img.title = name;
     img.loading = 'lazy';
     pill.appendChild(img);
-    pill.appendChild(document.createTextNode(tool.replace('.svg', '')));
   } else {
     pill.appendChild(document.createTextNode(tool));
   }
@@ -89,10 +113,29 @@ function buildToolsRow(tools) {
 function buildTopProjects(projects) {
   const container = document.getElementById('top-projects-container');
   container.innerHTML = '';
+  container.classList.add('bento');
 
-  projects.slice(0, 4).forEach((p, index) => {
-    container.appendChild(buildTopCard(p, index === 0));
-  });
+  const [first, second, third, ...rest] = projects;
+
+  // Lead card on the left, next two stacked on the right.
+  const lead = document.createElement('div');
+  lead.className = 'bento-row bento-lead';
+  if (first) lead.appendChild(buildTopCard(first, true));
+
+  const stack = document.createElement('div');
+  stack.className = 'bento-stack';
+  if (second) stack.appendChild(buildTopCard(second, false));
+  if (third) stack.appendChild(buildTopCard(third, false));
+  if (stack.children.length) lead.appendChild(stack);
+  container.appendChild(lead);
+
+  // Remaining favorites share a row underneath.
+  if (rest.length) {
+    const row = document.createElement('div');
+    row.className = 'bento-row bento-rest';
+    rest.forEach(p => row.appendChild(buildTopCard(p, false)));
+    container.appendChild(row);
+  }
 }
 
 function buildTopCard(p, isFirst) {
